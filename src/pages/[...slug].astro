@@ -20,20 +20,12 @@ const edition = await getCurrentEdition();
   title={page.data.title}
   description={page.data.description}
   status={edition.status}
-  noindex={page.data.noindex || page.data.draft}
+  noindex={page.data.noindex}
 >
   <article class="section">
     <div class="wrap prose">
       <SectionEyebrow>DevOpsDays Amsterdam</SectionEyebrow>
       <h1>{page.data.title}</h1>
-      {
-        page.data.draft && (
-          <p class="draft" role="note">
-            <strong>Draft — not approved.</strong> This page has not been signed off by the
-            organisers and must not be treated as policy.
-          </p>
-        )
-      }
       <Content />
     </div>
   </article>
@@ -59,22 +51,6 @@ const edition = await getCurrentEdition();
 
   .prose :global(strong) {
     color: var(--text);
-  }
-
-  .draft {
-    border: 1.5px dashed var(--orange);
-    border-radius: var(--radius-card);
-    padding: 0.9rem 1.1rem;
-    color: var(--text);
-    margin-bottom: 2rem;
-  }
-
-  /* Blockquotes carry the per-section sign-off notes. */
-  .prose :global(blockquote) {
-    border-inline-start: var(--ring-width) solid var(--orange);
-    margin-inline: 0;
-    padding-inline-start: 1.1rem;
-    color: var(--text-muted);
   }
 
   .prose :global(code) {

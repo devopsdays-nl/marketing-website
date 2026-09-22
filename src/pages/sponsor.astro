@@ -9,16 +9,24 @@ import { getCurrentEdition } from '../lib/current-edition';
 const edition = await getCurrentEdition();
 
 /**
- * Tiers are the ones the event actually used in 2025, taken from
- * data/events/2025/amsterdam/main.yml. Prices are deliberately absent: they are
- * not set for 2027, and inventing them here would be a fact we cannot stand behind.
+ * Tiers and their limits come from data/events/2025/amsterdam/main.yml.
+ * The 2025 counts are counted from the same file.
+ *
+ * Benefits are only stated where devopsdays-web states them. The live sponsor
+ * copy says exactly two things about what a tier includes: Gold gets a full
+ * table, Silver gets a standing table. Everything else is [TBC] rather than
+ * guessed — a sponsor deciding on a tier is making a purchase, and inventing
+ * what they get for their money would be the worst possible place to be wrong.
+ *
+ * Prices are absent for the same reason. An old price table exists upstream but
+ * is commented out, so it is not current policy.
  */
 const TIERS = [
-  { id: 'gold', label: 'Gold', max: 8, taken2025: 6, blurb: 'Largest logo placement, a stand in the main space, and tickets for your team.' },
-  { id: 'silver', label: 'Silver', max: 8, taken2025: 5, blurb: 'Logo placement, a table, and tickets.' },
-  { id: 'bronze', label: 'Bronze', max: 10, taken2025: 7, blurb: 'Logo placement and tickets. The usual starting point for smaller companies.' },
-  { id: 'coffee', label: 'Coffee', max: 1, taken2025: 1, blurb: 'You are the reason the coffee exists. Exactly one sponsor, every edition.' },
-  { id: 'lanyard', label: 'Lanyard', max: 1, taken2025: 1, blurb: 'Your brand around every attendee’s neck for three days. One sponsor only.' },
+  { id: 'gold', label: 'Gold', max: 8, taken2025: 6, benefit: 'A full table, to talk to people during the breaks.' },
+  { id: 'silver', label: 'Silver', max: 8, taken2025: 5, benefit: 'A standing table, to talk to people during the breaks.' },
+  { id: 'bronze', label: 'Bronze', max: 10, taken2025: 7, benefit: null },
+  { id: 'coffee', label: 'Coffee', max: 1, taken2025: 1, benefit: null },
+  { id: 'lanyard', label: 'Lanyard', max: 1, taken2025: 1, benefit: null },
 ];
 ---
 
@@ -60,7 +68,16 @@ const TIERS = [
                 <h3>{tier.label}</h3>
                 <PlaceholderChip tone="light">[PRICE TBC]</PlaceholderChip>
               </div>
-              <p class="tier__blurb">{tier.blurb}</p>
+              {
+                tier.benefit ? (
+                  <p class="tier__blurb">{tier.benefit}</p>
+                ) : (
+                  <p class="tier__blurb">
+                    What this tier includes for {edition.year} is{' '}
+                    <PlaceholderChip tone="light">[TBC]</PlaceholderChip>
+                  </p>
+                )
+              }
               <p class="tier__meta">
                 {tier.max === 1
                   ? 'One sponsor only'
@@ -78,14 +95,26 @@ const TIERS = [
   <section class="section">
     <div class="wrap">
       <SectionEyebrow>What you are sponsoring</SectionEyebrow>
-      <h2>An event that has run since 2013</h2>
+      <h2>Not a trade show</h2>
       <p>
-        The 2025 edition ran three days at Pakhuis de Zwijger with 43 speakers, 17 workshops and 20
-        sponsors. Two of those days were a single track, so everyone in the room saw the same talks —
-        and walked past the same sponsor tables between them.
+        DevOpsDays is a self-organising conference for practitioners that depends on sponsorships.
+        We do not have vendor booths, sell product presentations, or distribute attendee contact
+        lists. Sponsors get a short elevator pitch during the programme and recognition on the
+        website and on social media before, during and after the event.
       </p>
       <p>
-        A prospectus with audience numbers and the full benefit breakdown for {edition.year} is
+        Sponsors are encouraged to represent themselves by actively participating and engaging with
+        attendees as peers. Any attendee can demo a product or project as part of an open space
+        session — including yours. This is a community conference, so heavy marketing will probably
+        work against you. The best thing to do is send engineers to talk to other engineers on
+        their own terms.
+      </p>
+      <p>
+        The 2025 edition ran three days at Pakhuis de Zwijger with 43 speakers, 17 workshops and 20
+        sponsors. Two of those days were a single track, so everyone in the room saw the same talks.
+      </p>
+      <p>
+        A prospectus with audience numbers and the benefit breakdown for {edition.year} is
         <PlaceholderChip>[PROSPECTUS TBC]</PlaceholderChip>. Email us and we will send it the moment
         it exists.
       </p>

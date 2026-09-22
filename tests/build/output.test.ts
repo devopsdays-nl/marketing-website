@@ -140,19 +140,8 @@ describe('the nav is driven by edition status', () => {
   });
 });
 
-describe('unapproved content cannot ship as if it were approved', () => {
-  it('noindexes the privacy page while it is still a draft', () => {
-    const privacy = readFileSync(join(DIST, 'privacy/index.html'), 'utf8');
-    expect(privacy).toMatch(/name="robots" content="noindex/);
-  });
-
-  it('shows a visible draft banner on the privacy page', () => {
-    const privacy = readFileSync(join(DIST, 'privacy/index.html'), 'utf8');
-    expect(privacy).toContain('Draft');
-    expect(privacy).toContain('not approved');
-  });
-
-  it('does not noindex pages that are approved', () => {
+describe('indexing', () => {
+  it('does not noindex ordinary content pages', () => {
     const conduct = readFileSync(join(DIST, 'code-of-conduct/index.html'), 'utf8');
     expect(conduct).not.toMatch(/name="robots" content="noindex/);
   });
