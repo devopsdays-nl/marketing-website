@@ -1,7 +1,7 @@
 /**
  * DevOpsDays Amsterdam design tokens.
  *
- * Colour values are taken from the vector logo artwork (DODA25-logos.zip), not
+ * Colour values are taken from the designer’s vector logo artwork, not
  * sampled from a rasterised export. Every pairing in use is asserted by
  * tests/contrast.test.ts, which parses this file directly — so changing a value
  * here without checking contrast will fail the build.

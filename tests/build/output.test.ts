@@ -3,6 +3,8 @@ import { join } from 'node:path';
 
 import { beforeAll, describe, expect, it } from 'vitest';
 
+import { SITE } from '../../src/config/site';
+
 /**
  * Asserts against the real built output. These cover the promises that only hold
  * once everything is assembled — the performance and accessibility bars, and the
@@ -246,9 +248,8 @@ describe('head metadata', () => {
     expect(html).toMatch(/<link rel="canonical" href="https:\/\/[^"]+"/);
   });
 
-  it('does not index the site under a placeholder domain by accident', () => {
-    // A reminder that SITE.url is still the placeholder. Update this test when
-    // the real domain is set, together with SITE.domainDecided.
-    expect(html).toContain('devopsdays-amsterdam.invalid');
+  it('builds the canonical from SITE.url rather than hardcoding a host', () => {
+    const canonical = /<link rel="canonical" href="([^"]*)"/.exec(html)?.[1] ?? '';
+    expect(canonical).toBe(`${SITE.url}${import.meta.env.BASE_URL ?? '/'}`);
   });
 });

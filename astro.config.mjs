@@ -22,6 +22,14 @@ import { SITE } from './src/config/site.ts';
  */
 export default defineConfig({
   site: SITE.url,
+
+  /**
+   * A GitHub project page is served from /<repo>/, not the domain root. Set
+   * BASE_PATH in CI for that; it stays "/" locally and on a custom domain, where
+   * joinBase() then becomes a no-op.
+   */
+  base: process.env.BASE_PATH || '/',
+
   output: 'static',
 
   markdown: {
