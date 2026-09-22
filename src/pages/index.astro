@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import Button from '../components/Button.astro';
 import Logo from '../components/Logo.astro';
 import PlaceholderChip from '../components/PlaceholderChip.astro';
+import Icon from '../components/Icon.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import StatusPill from '../components/StatusPill.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -180,9 +181,9 @@ const FORMAT = [
 
   {
     sections.includes('stay-in-touch') && (
-      <section class="section stayintouch" id="stay-in-touch">
+      <section class="section section--paper" id="stay-in-touch">
         <div class="wrap">
-          <SectionEyebrow>Stay in touch</SectionEyebrow>
+          <SectionEyebrow tone="light">Stay in touch</SectionEyebrow>
           <h2>We will tell you when there is something to tell</h2>
           <p class="section__intro">
             There is no mailing list yet. Until there is, these all work — and the meetup runs
@@ -192,32 +193,32 @@ const FORMAT = [
           <ul class="channels">
             <li>
               <a href="https://www.meetup.com/DevOpsAmsterdam/">
-                <span class="channels__label">Meetup</span>
-                <span class="channels__note">DevOps Amsterdam meets year round</span>
+                <Icon name="meetup" />
+                <span>Meetup</span>
               </a>
             </li>
             <li>
               <a href="https://www.linkedin.com/company/devopsams" rel="me noopener">
-                <span class="channels__label">LinkedIn</span>
-                <span class="channels__note">Announcements land here first</span>
+                <Icon name="linkedin" />
+                <span>LinkedIn</span>
               </a>
             </li>
             <li>
               <a href="https://mastodon.social/@devopsams" rel="me noopener">
-                <span class="channels__label">Mastodon</span>
-                <span class="channels__note">@devopsams</span>
+                <Icon name="mastodon" />
+                <span>Mastodon</span>
               </a>
             </li>
             <li>
               <a href="https://bsky.app/profile/devopsams.bsky.social" rel="me noopener">
-                <span class="channels__label">Bluesky</span>
-                <span class="channels__note">devopsams.bsky.social</span>
+                <Icon name="bluesky" />
+                <span>Bluesky</span>
               </a>
             </li>
             <li>
               <a href={`mailto:${current.organiserEmail}`}>
-                <span class="channels__label">Email us</span>
-                <span class="channels__note">Ask to be told when dates are set</span>
+                <Icon name="email" />
+                <span>Email us</span>
               </a>
             </li>
           </ul>
@@ -302,11 +303,15 @@ const FORMAT = [
     font-size: clamp(1.3rem, 3vw, 1.75rem);
     line-height: 1.25;
     margin: 0 0 1rem;
+    /* Short enough to even out across its lines rather than leave a stub. */
+    text-wrap: balance;
   }
 
   .hero__body {
     color: var(--text-muted);
-    max-width: 46ch;
+    /* Was 46ch, which forced four ragged lines with a two-word last one. */
+    max-width: 58ch;
+    text-wrap: pretty;
   }
 
   .hero__actions {
@@ -318,7 +323,8 @@ const FORMAT = [
 
   .section__intro {
     color: var(--text-muted);
-    max-width: 52ch;
+    max-width: 58ch;
+    text-wrap: pretty;
   }
 
   .section--paper .section__intro {
@@ -390,47 +396,34 @@ const FORMAT = [
 
   /* ---- Stay in touch ---- */
 
-  .stayintouch {
-    background: var(--ink);
-    border-top: 1px solid var(--line);
-  }
-
   .channels {
     list-style: none;
     padding: 0;
     margin: 2rem 0 0;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.6rem;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   }
 
   .channels a {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
     min-height: var(--tap-target-min);
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--line);
-    border-radius: var(--radius-card);
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-pill);
     text-decoration: none;
-    color: var(--text);
+    color: var(--paper-text);
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.8rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    background: var(--paper);
   }
 
   .channels a:hover {
-    border-color: var(--orange);
-  }
-
-  .channels__label {
-    font-family: var(--font-label-family, var(--font-label));
-    font-size: 0.78rem;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--orange);
-  }
-
-  .channels__note {
-    color: var(--text-muted);
-    font-size: 0.88rem;
+    border-color: var(--orange-ink);
+    color: var(--orange-ink);
   }
 </style>

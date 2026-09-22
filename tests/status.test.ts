@@ -144,7 +144,7 @@ describe('the primary call to action', () => {
     // secondary action. The primary action has to lead somewhere that works
     // today: there is no mailing list yet, so it goes to the channels that
     // already exist rather than to a form with nothing behind it.
-    expect(primaryCta('announced')).toEqual({ label: 'Get notified', href: '#stay-in-touch' });
+    expect(primaryCta('announced')).toEqual({ label: 'Stay in touch', href: '#stay-in-touch' });
   });
 
   it('asks for proposals while the CFP is open', () => {

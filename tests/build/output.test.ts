@@ -149,7 +149,7 @@ describe('the primary call to action actually goes somewhere', () => {
     expect(html).not.toMatch(/<input[^>]*type="email"/);
   });
 
-  it('sends "Get notified" to a section that exists on this page', () => {
+  it('sends the primary action to a section that exists on this page', () => {
     const cta = /<a[^>]*class="btn btn--primary[^"]*"[^>]*>/.exec(html)?.[0] ?? '';
     const href = /href="([^"]*)"/.exec(cta)?.[1] ?? '';
     expect(href).toBe('#stay-in-touch');

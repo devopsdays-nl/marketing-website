@@ -137,7 +137,7 @@ export function primaryCta(status: EditionStatus): CallToAction | null {
     case 'announced':
       // There is no mailing list yet, so this points at the channels that
       // already exist rather than at a sign-up form with nothing behind it.
-      return { label: 'Get notified', href: '#stay-in-touch' };
+      return { label: 'Stay in touch', href: '#stay-in-touch' };
 
     case 'cfp-open':
       return { label: 'Propose a talk', href: '/propose' };
