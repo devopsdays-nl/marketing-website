@@ -26,3 +26,6 @@ pnpm-debug.log*
 # The designer's logo archive, if it is ever dropped in here again. Only the
 # three variants the build reads are vendored, in src/assets/logo/source/.
 DODA25-logos.zip
+
+# Shareable preview render, regenerate rather than commit
+devopsdays-amsterdam-preview.pdf

@@ -204,6 +204,17 @@ describe('the site reads as evergreen, not as a 2025 retrospective', () => {
   });
 });
 
+describe('copy reads correctly', () => {
+  it('has no word joined to a number by a missing space', () => {
+    // Astro drops the newline between an expression and the text after it, so
+    // `{current.year}\n  will be` rendered as "2027will be".
+    const main = /<main[\s\S]*?<\/main>/.exec(html)?.[0] ?? '';
+    const text = main.replace(/<[^>]*>/g, ' ');
+    const glued = text.match(/\b\d{4}[a-z]{2,}/g) ?? [];
+    expect(glued, 'a number is run together with a word').toEqual([]);
+  });
+});
+
 describe('markup stays lean', () => {
   it('no element carries duplicated Astro scope classes', () => {
     // Spreading a props object onto an element makes Astro append its scoped
