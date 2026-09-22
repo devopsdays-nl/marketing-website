@@ -35,15 +35,17 @@ const ASSETS: Record<string, string> = {
   // The full lockup with the Pakhuis de Zwijger building.
   'lockup-on-light.svg': 'DODA25-logo_graphic-colour-on-transp.svg',
 
-  // NOT included: the DODA monogram (DODA25-logo_minimal-*).
+  // Only the three variants above are vendored. The designer's set had 16; the
+  // other 13 were removed as unused.
   //
-  // In the wordmark and lockup the year is a <text> element, so it comes out
-  // cleanly. In the monogram it is drawn as vector paths inside the D counter,
-  // and removing it leaves a visibly empty box. That is artwork, not a script —
-  // either the designer supplies a year-less monogram, or someone redraws it.
+  // The DODA monogram is the notable omission. In the wordmark and lockup the
+  // year is a <text> element, so it comes out cleanly; in the monogram it is
+  // drawn as vector paths inside the D counter, and removing it leaves a
+  // visibly empty box. That is artwork, not a script. Nothing is blocked
+  // meanwhile: the wordmark is square, so it serves the nav and the favicon.
   //
-  // Nothing is blocked meanwhile: the wordmark is square, so it serves the nav
-  // and the favicon until a clean monogram exists.
+  // To restore any other variant, re-extract it from DODA25-logos.zip (the
+  // designer's original archive, gitignored) into src/assets/logo/source/.
 };
 
 mkdirSync(OUT, { recursive: true });

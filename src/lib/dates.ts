@@ -1,41 +1,11 @@
 /**
- * Date and duration formatting.
+ * Date formatting.
  *
- * Durations are always computed, never stored: the schedule shows one on every
- * row, and a stored duration is a third source of truth that can disagree with
- * the start and end times.
+ * Session durations are deliberately not here. They are computed from startTime
+ * and endTime rather than stored, so they cannot disagree with them — but the
+ * programme page that needs them does not exist yet, so the helpers were removed
+ * rather than kept unused. See the note in src/content.config.ts.
  */
-
-const TIME_PATTERN = /^([01]\d|2[0-3]):([0-5]\d)$/;
-
-function toMinutes(time: string): number {
-  const match = TIME_PATTERN.exec(time);
-  if (!match) {
-    throw new Error(`Not a 24-hour HH:MM time: "${time}"`);
-  }
-  return Number(match[1]) * 60 + Number(match[2]);
-}
-
-/** Minutes between two `HH:MM` times on the same day. */
-export function durationMinutes(startTime: string, endTime: string): number {
-  const start = toMinutes(startTime);
-  const end = toMinutes(endTime);
-
-  if (end < start) {
-    throw new Error(`End time "${endTime}" is before start time "${startTime}"`);
-  }
-  return end - start;
-}
-
-/** Renders a duration the way the schedule shows it: "25 min", "1 hr 30 min". */
-export function formatDuration(minutes: number): string {
-  const hours = Math.floor(minutes / 60);
-  const rest = minutes % 60;
-
-  if (hours === 0) return `${rest} min`;
-  if (rest === 0) return `${hours} hr`;
-  return `${hours} hr ${rest} min`;
-}
 
 const DAY = new Intl.DateTimeFormat('en-GB', { day: 'numeric', timeZone: 'UTC' });
 const MONTH = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'UTC' });
