@@ -113,6 +113,12 @@ const pages = defineCollection({
     description: z.string(),
     /** Kept out of the sitemap and robots, e.g. the styleguide. */
     noindex: z.boolean().default(false),
+    /**
+     * Content that has not been approved by the organisers. Draft pages are
+     * noindexed and carry a visible banner, so an unratified policy can never
+     * be mistaken for a published one.
+     */
+    draft: z.boolean().default(false),
   }),
 });
 

@@ -140,6 +140,29 @@ describe('the nav is driven by edition status', () => {
   });
 });
 
+describe('unapproved content cannot ship as if it were approved', () => {
+  it('noindexes the privacy page while it is still a draft', () => {
+    const privacy = readFileSync(join(DIST, 'privacy/index.html'), 'utf8');
+    expect(privacy).toMatch(/name="robots" content="noindex/);
+  });
+
+  it('shows a visible draft banner on the privacy page', () => {
+    const privacy = readFileSync(join(DIST, 'privacy/index.html'), 'utf8');
+    expect(privacy).toContain('Draft');
+    expect(privacy).toContain('not approved');
+  });
+
+  it('does not noindex pages that are approved', () => {
+    const conduct = readFileSync(join(DIST, 'code-of-conduct/index.html'), 'utf8');
+    expect(conduct).not.toMatch(/name="robots" content="noindex/);
+  });
+
+  it('keeps the styleguide out of search results', () => {
+    const styleguide = readFileSync(join(DIST, 'styleguide/index.html'), 'utf8');
+    expect(styleguide).toMatch(/name="robots" content="noindex/);
+  });
+});
+
 describe('head metadata', () => {
   it('sets a canonical URL', () => {
     expect(html).toMatch(/<link rel="canonical" href="https:\/\/[^"]+"/);

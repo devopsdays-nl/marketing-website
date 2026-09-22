@@ -49,36 +49,43 @@ const FORMAT = [
   {
     sections.includes('hero') && (
       <section class="hero">
-        <div class="wrap">
-          <p class="hero__saveTheDate">
-            <span class="hero__label">Save the date</span>
-            <span class="hero__year">{current.year}</span>
-          </p>
-
-          {/* The wordmark is the page heading — we do not typeset the name twice. */}
+        <div class="wrap hero__inner">
+          {/*
+            The wordmark is the page heading — we do not typeset the name beside
+            it as well. It comes first in the DOM so the heading is the first
+            thing announced, and so it stacks above the copy on a phone; on wider
+            screens the grid places it in the right-hand column.
+          */}
           <h1 class="hero__title">
             <Logo
               variant="wordmark"
               tone="dark"
               alt={`DevOpsDays Amsterdam ${current.year}`}
-              width={352}
+              width={260}
               class="hero__logo"
             />
           </h1>
 
-          <p class="hero__lede">
-            After a year off, we are coming back for the {current.ordinal} edition.
-          </p>
-          <p class="hero__body">
-            Three days in Amsterdam for the people who build, run and look after software.
-            Workshops, a single track of talks, and Open Spaces where the agenda is yours.
-            We are working on dates and a venue now.
-          </p>
+          <div class="hero__text">
+            <p class="hero__saveTheDate">
+              <span class="hero__label">Save the date</span>
+              <span class="hero__year">{current.year}</span>
+            </p>
 
-          <p class="hero__actions">
-            {cta && <Button href={cta.href} variant="primary">{cta.label}</Button>}
-            <Button href="/sponsor" variant="outline">Sponsor the conference</Button>
-          </p>
+            <p class="hero__lede">
+              After a year off, we are coming back for the {current.ordinal} edition.
+            </p>
+            <p class="hero__body">
+              Three days in Amsterdam for the people who build, run and look after software.
+              Workshops, a single track of talks, and Open Spaces where the agenda is yours.
+              We are working on dates and a venue now.
+            </p>
+
+            <p class="hero__actions">
+              {cta && <Button href={cta.href} variant="primary">{cta.label}</Button>}
+              <Button href="/sponsor" variant="outline">Sponsor the conference</Button>
+            </p>
+          </div>
         </div>
       </section>
     )
@@ -203,9 +210,39 @@ const FORMAT = [
 
 <style>
   .hero {
-    padding-block: clamp(2.5rem, 9vw, 6rem);
+    /* Tightened so the "Where things stand" rows start near the fold: the
+       status block is the point of this page, not the hero. */
+    padding-block: clamp(1.75rem, 4.5vw, 3.5rem);
     background: var(--ink);
     border-bottom: 1px solid var(--line);
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /*
+   * Below this width the grid collapses and DOM order applies, putting the
+   * wordmark above the copy.
+   */
+  @media (min-width: 52rem) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 17rem);
+      gap: 1rem 3rem;
+    }
+
+    .hero__text {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .hero__title {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+    }
   }
 
   .hero__saveTheDate {
@@ -215,7 +252,7 @@ const FORMAT = [
     border: 1.5px solid var(--orange);
     border-radius: var(--radius-pill);
     padding: 0.35rem 0.9rem;
-    margin: 0 0 1.75rem;
+    margin: 0 0 1.25rem;
   }
 
   .hero__label {
@@ -233,11 +270,11 @@ const FORMAT = [
   }
 
   .hero__title {
-    margin: 0 0 1.5rem;
+    margin: 0;
   }
 
   .hero__logo {
-    width: min(100%, 22rem);
+    width: min(100%, 16.25rem);
   }
 
   .hero__lede {
@@ -257,7 +294,7 @@ const FORMAT = [
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin: 2rem 0 0;
+    margin: 1.5rem 0 0;
   }
 
   .section__intro {
