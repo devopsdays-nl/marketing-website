@@ -106,7 +106,7 @@ src/
     status.ts             The status machine: nav, home sections, calls to action
     status-rows.ts        "Where things stand"
     colour.ts             WCAG contrast maths, used by the contrast test
-    dates.ts  url.ts  svg.ts
+    dates.ts  svg.ts   Date formatting, SVG surgery for the logo
   components/             Button, PlaceholderChip, StatusPill, PersonCard, Logo…
   layouts/BaseLayout.astro
   pages/                  One file per route
