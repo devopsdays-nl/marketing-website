@@ -1,0 +1,63 @@
+---
+import wordmarkDark from '../assets/logo/wordmark-on-dark.svg?url';
+import wordmarkLight from '../assets/logo/wordmark-on-light.svg?url';
+import lockupLight from '../assets/logo/lockup-on-light.svg?url';
+
+/**
+ * The single swap point for the logo.
+ *
+ * On dark surfaces this uses the designer's own white-letterform artwork, where
+ * the orange details survive. It is deliberately NOT a CSS filter over the black
+ * version: a filter would flatten the mark to one tone and throw away half the
+ * brand.
+ *
+ * Referenced as <img> rather than inlined. The Illustrator export carries a
+ * <style> block full of generic .st0-.st65 class names, and those are
+ * document-global once inlined — two logos on one page would fight over them and
+ * one would render in the wrong colours. As a file it is also cached once and
+ * shared across pages instead of costing ~24KB per occurrence.
+ *
+ * The year has been stripped from all of these (see scripts/prepare-logos.ts), so
+ * the same files serve every edition. The year is carried by the hero pill.
+ */
+interface Props {
+  variant?: 'wordmark' | 'lockup';
+  tone?: 'dark' | 'light';
+  /** Accessible name. Pass "" when a heading nearby already names the event. */
+  alt?: string;
+  /** Rendered width in px; the artwork is square, so height matches. */
+  width?: number;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+const {
+  variant = 'wordmark',
+  tone = 'dark',
+  alt = 'DevOpsDays Amsterdam',
+  width = 320,
+  class: className,
+  loading = 'eager',
+} = Astro.props;
+
+const src = variant === 'lockup' ? lockupLight : tone === 'dark' ? wordmarkDark : wordmarkLight;
+---
+
+<img
+  src={src}
+  alt={alt}
+  width={width}
+  height={width}
+  class:list={['logo', className]}
+  loading={loading}
+  decoding="async"
+/>
+
+<style>
+  .logo {
+    display: block;
+    /* The artwork is a 1500x1500 square; width and height above keep the box
+       reserved so the hero does not shift as it loads. */
+    aspect-ratio: 1;
+    height: auto;
+  }
+</style>

@@ -1,0 +1,10 @@
+name: "Issy Long"
+pronouns: "they/them"
+photo: "../../assets/organisers/issy.jpeg"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/issyl0"
+  - label: "GitHub"
+    url: "https://github.com/issyl0"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

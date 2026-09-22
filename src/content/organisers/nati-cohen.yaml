@@ -1,0 +1,8 @@
+name: "Nati Cohen"
+pronouns: "he/him"
+photo: "../../assets/organisers/nati.jpg"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/natict/"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

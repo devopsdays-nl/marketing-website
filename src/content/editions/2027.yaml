@@ -1,0 +1,25 @@
+# The 2027 edition, the 14th.
+#
+# Fields are commented out, not filled with guesses: an absent field renders a
+# [TBC] chip, and each row of "Where things stand" goes live on its own the
+# moment the field below is filled in. Nothing needs editing twice.
+#
+# To announce dates: uncomment startDate and endDate. That is the only edit.
+
+year: 2027
+ordinal: 14th
+status: announced
+organiserEmail: amsterdam@devopsdays.org
+
+# startDate: 2027-06-16
+# endDate: 2027-06-18
+
+# venueName: Pakhuis de Zwijger
+# venueAddress: Piet Heinkade 179, 1019 HC Amsterdam
+
+# cfpOpens: 2026-12-15
+# cfpCloses: 2027-01-31
+# cfpUrl: https://talks.devopsdays.org/devopsdays-amsterdam-2027/cfp
+
+# ticketsOpen: 2027-01-01
+# ticketsUrl: https://tickets.devopsdays.org/devopsdays-amsterdam-2027

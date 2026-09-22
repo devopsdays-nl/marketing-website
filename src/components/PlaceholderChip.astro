@@ -1,0 +1,36 @@
+---
+/**
+ * Marks a fact nobody knows yet: [DATES TBC], [VENUE TBC], [PRICE].
+ *
+ * This is a real component, not a hack. A site that says "coming soon" in vague
+ * prose reads as abandoned; one that shows a styled, dashed chip reads as
+ * actively maintained, and it tells the organisers exactly which fields are
+ * still theirs to fill.
+ */
+interface Props {
+  tone?: 'dark' | 'light';
+}
+const { tone = 'dark' } = Astro.props;
+---
+
+<span class:list={['chip', tone === 'light' && 'chip--light']}><slot /></span>
+
+<style>
+  .chip {
+    display: inline-block;
+    font-family: var(--font-label-family, var(--font-label));
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1.5px dashed var(--orange);
+    border-radius: var(--radius-pill);
+    padding: 0.3rem 0.85rem;
+  }
+
+  .chip--light {
+    color: var(--orange-ink);
+    border-color: var(--orange-ink);
+  }
+</style>

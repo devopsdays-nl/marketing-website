@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import { SITE } from '../config/site';
+import { getCurrentEdition } from '../lib/current-edition';
+
+const edition = await getCurrentEdition();
+
+const CHANNELS = [
+  { label: 'LinkedIn', handle: '/company/devopsams', url: 'https://www.linkedin.com/company/devopsams' },
+  { label: 'Mastodon', handle: '@devopsams', url: 'https://mastodon.social/@devopsams' },
+  { label: 'Bluesky', handle: 'devopsams.bsky.social', url: 'https://bsky.app/profile/devopsams.bsky.social' },
+  { label: 'YouTube', handle: '@devopsAmsterdam', url: 'https://www.youtube.com/@devopsAmsterdam' },
+  { label: 'Meetup', handle: 'DevOpsAmsterdam', url: 'https://www.meetup.com/DevOpsAmsterdam/' },
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description="How to reach the DevOpsDays Amsterdam organising team."
+  status={edition.status}
+>
+  <section class="section">
+    <div class="wrap">
+      <SectionEyebrow>Contact</SectionEyebrow>
+      <h1>Talk to a human</h1>
+      <p class="lede">
+        There is a person on the other end of all of these. We are volunteers, so a reply can take a
+        few days — but it will come.
+      </p>
+
+      <h2>Email</h2>
+      <p>
+        <a class="email" href={`mailto:${SITE.organiserEmail}`}>{SITE.organiserEmail}</a>
+      </p>
+      <p class="muted">
+        For anything to do with the Code of Conduct, write to
+        <a href="mailto:amsterdam-coc@devopsdays.org">amsterdam-coc@devopsdays.org</a> instead. That
+        reaches the Code of Conduct team rather than the whole organising team.
+      </p>
+
+      <h2>Elsewhere</h2>
+      <ul class="channels">
+        {
+          CHANNELS.map((c) => (
+            <li>
+              <a href={c.url} rel="me noopener">
+                <span class="channels__label">{c.label}</span>
+                <span class="channels__handle">{c.handle}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2>Sponsoring</h2>
+      <p>
+        Sponsorship is open now. The <a href="/sponsor">sponsor page</a> has the tiers and what each
+        one includes, or just email us.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lede {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 46ch;
+  }
+
+  .muted {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .email {
+    font-family: var(--font-heading-family, var(--font-heading));
+    font-size: clamp(1.15rem, 3vw, 1.6rem);
+    font-weight: 700;
+  }
+
+  h2 {
+    margin-top: 2.5rem;
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+  }
+
+  .channels {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .channels a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    min-height: var(--tap-target-min);
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    color: var(--text);
+  }
+
+  .channels a:hover {
+    border-color: var(--orange);
+  }
+
+  .channels__label {
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.78rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .channels__handle {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+</style>

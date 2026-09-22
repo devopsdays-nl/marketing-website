@@ -1,0 +1,51 @@
+---
+import type { RowState } from '../lib/status-rows';
+
+/**
+ * Solid orange when something is available now, dashed grey when it is not yet
+ * (or no longer) open. The two states are distinguished by border style and text
+ * as well as colour, so the meaning survives for colourblind readers.
+ */
+interface Props {
+  state: RowState;
+}
+const { state } = Astro.props;
+---
+
+<span class:list={['pill', `pill--${state}`]}><slot /></span>
+
+<style>
+  .pill {
+    display: inline-block;
+    font-family: var(--font-label-family, var(--font-label));
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: var(--radius-pill);
+    padding: 0.3rem 0.85rem;
+    border: 1.5px solid transparent;
+  }
+
+  .pill--open {
+    background: var(--orange);
+    color: var(--ink);
+  }
+
+  .pill--pending {
+    color: var(--text-muted);
+    border-color: var(--line);
+    border-style: dashed;
+  }
+
+  .pill--tbc {
+    color: var(--orange);
+    border-color: var(--orange);
+    border-style: dashed;
+  }
+
+  .pill--confirmed {
+    color: var(--text);
+    border-color: var(--line);
+  }
+</style>

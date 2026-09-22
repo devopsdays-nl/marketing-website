@@ -1,0 +1,10 @@
+name: "Eti Dahan Noked"
+pronouns: "she/her"
+photo: "../../assets/organisers/eti.png"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/eti-dahan-noked/"
+  - label: "GitHub"
+    url: "https://github.com/EtiNoked"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

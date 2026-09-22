@@ -1,0 +1,380 @@
+---
+import { getCollection } from 'astro:content';
+
+import Button from '../components/Button.astro';
+import Logo from '../components/Logo.astro';
+import PlaceholderChip from '../components/PlaceholderChip.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import StatusPill from '../components/StatusPill.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { homeSections, primaryCta } from '../lib/status';
+import { whereThingsStand } from '../lib/status-rows';
+import type { Edition } from '../lib/edition';
+
+/**
+ * The home page composition comes from the edition status. Changing `status` in
+ * src/content/editions/2027.yaml changes this page and the nav, with no edit here.
+ */
+const editions = await getCollection('editions');
+const current = editions
+  .map((entry) => ({ ...entry.data, slug: entry.id }) as Edition)
+  .filter((edition) => edition.status !== 'archived')
+  .sort((a, b) => b.year - a.year)[0]!;
+
+const sections = homeSections(current.status);
+const cta = primaryCta(current.status);
+const rows = whereThingsStand(current, new Date());
+
+const FORMAT = [
+  {
+    title: 'A day of workshops',
+    body: 'Day one is hands-on. Parallel sessions in small rooms, capped so you can actually ask a question. In 2025 we ran 17 of them.',
+  },
+  {
+    title: 'Two days of talks and Ignites',
+    body: 'A single track, so the whole room shares a reference point. Thirty-minute talks, plus Ignites: five minutes, twenty slides, auto-advancing.',
+  },
+  {
+    title: 'Open Spaces throughout',
+    body: 'Attendees propose and run the sessions. This is the centre of the event, not a side activity — the part people come back for.',
+  },
+];
+---
+
+<BaseLayout
+  title="DevOpsDays Amsterdam"
+  description="DevOpsDays Amsterdam returns for its 14th edition in 2027. Sponsorship is open now; dates, venue and the call for papers are being confirmed."
+  status={current.status}
+>
+  {
+    sections.includes('hero') && (
+      <section class="hero">
+        <div class="wrap">
+          <p class="hero__saveTheDate">
+            <span class="hero__label">Save the date</span>
+            <span class="hero__year">{current.year}</span>
+          </p>
+
+          {/* The wordmark is the page heading — we do not typeset the name twice. */}
+          <h1 class="hero__title">
+            <Logo
+              variant="wordmark"
+              tone="dark"
+              alt={`DevOpsDays Amsterdam ${current.year}`}
+              width={352}
+              class="hero__logo"
+            />
+          </h1>
+
+          <p class="hero__lede">
+            After a year off, we are coming back for the {current.ordinal} edition.
+          </p>
+          <p class="hero__body">
+            Three days in Amsterdam for the people who build, run and look after software.
+            Workshops, a single track of talks, and Open Spaces where the agenda is yours.
+            We are working on dates and a venue now.
+          </p>
+
+          <p class="hero__actions">
+            {cta && <Button href={cta.href} variant="primary">{cta.label}</Button>}
+            <Button href="/sponsor" variant="outline">Sponsor the conference</Button>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    sections.includes('where-things-stand') && (
+      <section class="section" id="where-things-stand">
+        <div class="wrap">
+          <SectionEyebrow>Where things stand</SectionEyebrow>
+          <h2>What is settled, and what is not</h2>
+          <p class="section__intro">
+            We would rather show you the gaps than pad them out with vague prose. Each row below
+            goes live the moment it is real.
+          </p>
+
+          <ul class="stand">
+            {rows.map((row) => (
+              <li class="stand__row">
+                <span class="stand__label">{row.label}</span>
+                <span class="stand__value">
+                  {row.state === 'tbc' ? (
+                    <PlaceholderChip>{row.value}</PlaceholderChip>
+                  ) : row.href ? (
+                    <a href={row.href}>
+                      <StatusPill state={row.state}>{row.value}</StatusPill>
+                    </a>
+                  ) : (
+                    <StatusPill state={row.state}>{row.value}</StatusPill>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    sections.includes('what-to-expect') && (
+      <section class="section section--paper">
+        <div class="wrap">
+          <SectionEyebrow tone="light">What to expect</SectionEyebrow>
+          <h2>The format is the part we already know</h2>
+          <p class="section__intro">
+            We cannot tell you who is speaking yet. We can tell you exactly how the three days work,
+            because that has not changed in thirteen editions.
+          </p>
+
+          <div class="cards">
+            {FORMAT.map((card) => (
+              <article class="card">
+                <h3>{card.title}</h3>
+                <p>{card.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    sections.includes('in-the-meantime') && (
+      <section class="section">
+        <div class="wrap">
+          <SectionEyebrow>In the meantime</SectionEyebrow>
+          <h2>There is plenty to be going on with</h2>
+
+          <div class="cards">
+            <article class="card card--dark">
+              <h3>Watch 2025</h3>
+              <p>Forty-three speakers across three days. Every talk was recorded.</p>
+              <p><a href="https://www.youtube.com/@devopsAmsterdam">Recordings on YouTube</a></p>
+            </article>
+            <article class="card card--dark">
+              <h3>Browse the archive</h3>
+              <p>Programmes, speakers and slides from previous editions.</p>
+              <p><a href="/archive">Past editions</a></p>
+            </article>
+            <article class="card card--dark">
+              <h3>Come to a meetup</h3>
+              <p>DevOps Amsterdam meets through the year, between editions.</p>
+              <p><a href="https://www.meetup.com/DevOpsAmsterdam/">Join the meetup group</a></p>
+            </article>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    sections.includes('newsletter') && (
+      <section class="section newsletter" id="newsletter">
+        <div class="wrap">
+          <SectionEyebrow>Stay in the loop</SectionEyebrow>
+          <h2>Two emails. That is the whole promise.</h2>
+          <p class="section__intro">
+            One when the dates are confirmed, one when the call for papers opens. Nothing else, and
+            you can unsubscribe from either.
+          </p>
+
+          <form class="newsletter__form" action="/newsletter" method="post">
+            <div class="newsletter__field">
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <Button type="submit" variant="primary">Get notified</Button>
+          </form>
+
+          <p class="newsletter__legal">
+            We will email you to confirm before adding you. We store your address only to send
+            these two emails, and we delete the list after the event. See our
+            <a href="/privacy">privacy note</a>.
+          </p>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: clamp(2.5rem, 9vw, 6rem);
+    background: var(--ink);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero__saveTheDate {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 1.5px solid var(--orange);
+    border-radius: var(--radius-pill);
+    padding: 0.35rem 0.9rem;
+    margin: 0 0 1.75rem;
+  }
+
+  .hero__label {
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.72rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .hero__year {
+    font-family: var(--font-heading-family, var(--font-heading));
+    font-weight: 800;
+    color: var(--orange);
+  }
+
+  .hero__title {
+    margin: 0 0 1.5rem;
+  }
+
+  .hero__logo {
+    width: min(100%, 22rem);
+  }
+
+  .hero__lede {
+    font-family: var(--font-heading-family, var(--font-heading));
+    font-weight: 700;
+    font-size: clamp(1.3rem, 3vw, 1.75rem);
+    line-height: 1.25;
+    margin: 0 0 1rem;
+  }
+
+  .hero__body {
+    color: var(--text-muted);
+    max-width: 46ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 2rem 0 0;
+  }
+
+  .section__intro {
+    color: var(--text-muted);
+    max-width: 52ch;
+  }
+
+  .section--paper .section__intro {
+    color: var(--paper-muted);
+  }
+
+  /* ---- Where things stand ---- */
+
+  .stand {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .stand__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stand__label {
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.8rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .stand__value a {
+    text-decoration: none;
+  }
+
+  /* ---- Cards ---- */
+
+  .cards {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    margin-top: 2rem;
+  }
+
+  .card {
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+  }
+
+  .card h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .card p:last-child {
+    margin-bottom: 0;
+  }
+
+  .card--dark {
+    border-color: var(--line);
+    background: var(--card);
+  }
+
+  .card--dark p {
+    color: var(--text-muted);
+  }
+
+  /* ---- Newsletter ---- */
+
+  .newsletter {
+    background: var(--ink);
+    border-top: 1px solid var(--line);
+  }
+
+  .newsletter__form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .newsletter__field {
+    display: grid;
+    gap: 0.4rem;
+    flex: 1 1 18rem;
+  }
+
+  .newsletter__field label {
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.75rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .newsletter__field input {
+    min-height: var(--tap-target-min);
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--line);
+    background: var(--ink-deep);
+    color: var(--text);
+    font: inherit;
+  }
+
+  .newsletter__legal {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 1.25rem;
+    max-width: 52ch;
+  }
+</style>

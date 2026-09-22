@@ -1,0 +1,9 @@
+name: "Joep Piscaer"
+photo: "../../assets/organisers/joep.png"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/jpiscaer"
+  - label: "Twitter"
+    url: "https://twitter.com/jpiscaer"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

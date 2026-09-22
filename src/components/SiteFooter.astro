@@ -1,0 +1,92 @@
+---
+import { SITE } from '../config/site';
+
+/**
+ * The Code of Conduct is linked here, which puts it on the footer of every single
+ * page. That is a requirement, not a convention.
+ *
+ * Past editions live down here too: the archive should not compete with the
+ * current edition for attention in the top bar.
+ */
+const SOCIALS = [
+  { label: 'LinkedIn', url: 'https://www.linkedin.com/company/devopsams' },
+  { label: 'Mastodon', url: 'https://mastodon.social/@devopsams' },
+  { label: 'Bluesky', url: 'https://bsky.app/profile/devopsams.bsky.social' },
+  { label: 'YouTube', url: 'https://www.youtube.com/@devopsAmsterdam' },
+  { label: 'Meetup', url: 'https://www.meetup.com/DevOpsAmsterdam/' },
+];
+---
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <div>
+      <p class="foot__name">DevOpsDays Amsterdam</p>
+      <p class="foot__muted">
+        Organised by volunteers since 2013.<br />
+        <a href={`mailto:${SITE.organiserEmail}`}>{SITE.organiserEmail}</a>
+      </p>
+    </div>
+
+    <nav aria-label="Footer">
+      <ul class="foot__list">
+        <li><a href="/code-of-conduct">Code of Conduct</a></li>
+        <li><a href="/conference-buddy">Conference Buddy</a></li>
+        <li><a href="/organisers">Organisers</a></li>
+        <li><a href="/archive">Past editions</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Social">
+      <ul class="foot__list">
+        {SOCIALS.map((s) => <li><a href={s.url} rel="me noopener">{s.label}</a></li>)}
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    border-top: 1px solid var(--line);
+    background: var(--ink);
+    padding-block: 3rem 3.5rem;
+  }
+
+  .foot__inner {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+
+  .foot__name {
+    font-family: var(--font-heading-family, var(--font-heading));
+    font-weight: 700;
+    margin: 0 0 0.4rem;
+  }
+
+  .foot__muted {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .foot__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .foot__list a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .foot__list a:hover {
+    color: var(--orange);
+    text-decoration: underline;
+  }
+</style>

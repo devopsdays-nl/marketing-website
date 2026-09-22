@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import PlaceholderChip from '../components/PlaceholderChip.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import { SITE } from '../config/site';
+import { getCurrentEdition } from '../lib/current-edition';
+
+const edition = await getCurrentEdition();
+
+/**
+ * Tiers are the ones the event actually used in 2025, taken from
+ * data/events/2025/amsterdam/main.yml. Prices are deliberately absent: they are
+ * not set for 2027, and inventing them here would be a fact we cannot stand behind.
+ */
+const TIERS = [
+  { id: 'gold', label: 'Gold', max: 8, taken2025: 6, blurb: 'Largest logo placement, a stand in the main space, and tickets for your team.' },
+  { id: 'silver', label: 'Silver', max: 8, taken2025: 5, blurb: 'Logo placement, a table, and tickets.' },
+  { id: 'bronze', label: 'Bronze', max: 10, taken2025: 7, blurb: 'Logo placement and tickets. The usual starting point for smaller companies.' },
+  { id: 'coffee', label: 'Coffee', max: 1, taken2025: 1, blurb: 'You are the reason the coffee exists. Exactly one sponsor, every edition.' },
+  { id: 'lanyard', label: 'Lanyard', max: 1, taken2025: 1, blurb: 'Your brand around every attendee’s neck for three days. One sponsor only.' },
+];
+---
+
+<BaseLayout
+  title="Sponsor"
+  description="Sponsor DevOpsDays Amsterdam 2027. Tiers, what each includes, and how to get in touch."
+  status={edition.status}
+>
+  <section class="section">
+    <div class="wrap">
+      <SectionEyebrow>Sponsorship</SectionEyebrow>
+      <h1>Sponsor the {edition.ordinal} edition</h1>
+      <p class="lede">
+        Sponsorship is open now — it is the first thing that opens, well before dates, the
+        programme or tickets. If you want a say in which tier you get, this is the moment.
+      </p>
+
+      <p class="actions">
+        <Button href={`mailto:${SITE.organiserEmail}?subject=Sponsoring%20DevOpsDays%20Amsterdam%20${edition.year}`}>
+          Talk to us about sponsoring
+        </Button>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="wrap">
+      <SectionEyebrow tone="light">Tiers</SectionEyebrow>
+      <h2>What is available</h2>
+      <p class="intro">
+        These are the tiers we ran in 2025. Prices for {edition.year} are being set now.
+      </p>
+
+      <ul class="tiers">
+        {
+          TIERS.map((tier) => (
+            <li class="tier">
+              <div class="tier__head">
+                <h3>{tier.label}</h3>
+                <PlaceholderChip tone="light">[PRICE TBC]</PlaceholderChip>
+              </div>
+              <p class="tier__blurb">{tier.blurb}</p>
+              <p class="tier__meta">
+                {tier.max === 1
+                  ? 'One sponsor only'
+                  : `Up to ${tier.max} sponsors`}
+                {' · '}
+                {tier.taken2025} took this tier in 2025
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <SectionEyebrow>What you are sponsoring</SectionEyebrow>
+      <h2>An event that has run since 2013</h2>
+      <p>
+        The 2025 edition ran three days at Pakhuis de Zwijger with 43 speakers, 17 workshops and 20
+        sponsors. Two of those days were a single track, so everyone in the room saw the same talks —
+        and walked past the same sponsor tables between them.
+      </p>
+      <p>
+        A prospectus with audience numbers and the full benefit breakdown for {edition.year} is
+        <PlaceholderChip>[PROSPECTUS TBC]</PlaceholderChip>. Email us and we will send it the moment
+        it exists.
+      </p>
+      <p>
+        You can also look at <a href="/archive">previous editions</a> to see who sponsored before.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lede {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 48ch;
+  }
+
+  .actions {
+    margin-top: 2rem;
+  }
+
+  .intro {
+    color: var(--paper-muted);
+    max-width: 48ch;
+  }
+
+  .tiers {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  }
+
+  .tier {
+    border: 1px solid var(--paper-line);
+    border-radius: var(--radius-card);
+    padding: 1.4rem;
+  }
+
+  .tier__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+  }
+
+  .tier__head h3 {
+    margin: 0;
+  }
+
+  .tier__blurb {
+    color: var(--paper-text);
+    margin-bottom: 0.6rem;
+  }
+
+  .tier__meta {
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--paper-muted);
+    margin: 0;
+  }
+</style>

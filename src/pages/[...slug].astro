@@ -1,0 +1,55 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import { getCurrentEdition } from '../lib/current-edition';
+
+export const getStaticPaths = (async () => {
+  const pages = await getCollection('pages');
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const edition = await getCurrentEdition();
+---
+
+<BaseLayout
+  title={page.data.title}
+  description={page.data.description}
+  status={edition.status}
+  noindex={page.data.noindex}
+>
+  <article class="section">
+    <div class="wrap prose">
+      <SectionEyebrow>DevOpsDays Amsterdam</SectionEyebrow>
+      <h1>{page.data.title}</h1>
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose {
+    max-width: 44rem;
+  }
+
+  .prose :global(h2) {
+    margin-top: 2.5rem;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+  }
+
+  .prose :global(ul) {
+    padding-inline-start: 1.2rem;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.4rem;
+  }
+
+  .prose :global(strong) {
+    color: var(--text);
+  }
+</style>

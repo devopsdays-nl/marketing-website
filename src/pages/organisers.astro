@@ -1,0 +1,127 @@
+---
+import { getCollection } from 'astro:content';
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import PersonCard from '../components/PersonCard.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import { SITE } from '../config/site';
+import { getCurrentEdition } from '../lib/current-edition';
+
+const edition = await getCurrentEdition();
+const organisers = (await getCollection('organisers')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name),
+);
+
+/**
+ * The team listed here is the one that ran the last edition. We do not present it
+ * as the 2027 team, because that team is still forming — saying otherwise would
+ * be stating something we cannot stand behind.
+ */
+const lastEdition = Math.max(...organisers.flatMap((o) => o.data.editions), 0);
+---
+
+<BaseLayout
+  title="Organisers"
+  description="The volunteers who organise DevOpsDays Amsterdam, and how to join them."
+  status={edition.status}
+>
+  <section class="section">
+    <div class="wrap">
+      <SectionEyebrow>Organisers</SectionEyebrow>
+      <h1>Run by volunteers</h1>
+      <p class="lede">
+        Nobody is paid to do this. DevOpsDays Amsterdam is put together by people who do it around
+        their jobs, and has been since 2013.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>The {lastEdition} team</h2>
+      <p class="muted">
+        The team for {edition.year} is still forming — several of these people are expected to
+        return, and we will update this page once it is settled.
+      </p>
+
+      <ul class="people">
+        {
+          organisers.map((person) => (
+            <li>
+              <PersonCard
+                name={person.data.name}
+                photo={person.data.photo}
+                secondary={person.data.pronouns}
+                links={person.data.links}
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="wrap">
+      <SectionEyebrow tone="light">Help out</SectionEyebrow>
+      <h2>We could use a hand</h2>
+      <p class="intro">
+        Organising takes more people than you would think, and most of the work is not technical.
+        If you have helped at a conference before, or have never done it and want to, we would like
+        to hear from you.
+      </p>
+      <p class="intro">
+        There is also plenty to do on the day itself — running a room, helping at registration,
+        being a <a href="/conference-buddy">Conference Buddy</a>.
+      </p>
+      <p class="actions">
+        <Button href={`mailto:${SITE.organiserEmail}?subject=Helping%20organise%20DevOpsDays%20Amsterdam`}>
+          Offer to help
+        </Button>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>The global core team</h2>
+      <p class="muted">
+        DevOpsDays worldwide is coordinated by a volunteer core team, separate from the Amsterdam
+        organisers. They are listed on
+        <a href="https://devopsdays.org/about/">devopsdays.org</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lede {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 46ch;
+  }
+
+  .muted {
+    color: var(--text-muted);
+    max-width: 52ch;
+  }
+
+  .intro {
+    color: var(--paper-muted);
+    max-width: 52ch;
+  }
+
+  .actions {
+    margin-top: 1.5rem;
+  }
+
+  .people {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 0;
+    display: grid;
+    gap: 2.5rem 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  }
+</style>

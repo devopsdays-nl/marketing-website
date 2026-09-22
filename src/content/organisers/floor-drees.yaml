@@ -1,0 +1,10 @@
+name: "Floor Drees"
+pronouns: "she/her"
+photo: "../../assets/organisers/floor.jpg"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/floordrees/"
+  - label: "Twitter"
+    url: "https://twitter.com/DevOpsBarbie"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

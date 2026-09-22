@@ -1,0 +1,10 @@
+name: "Jos van Schouten"
+pronouns: "he/him"
+photo: "../../assets/organisers/jos.png"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/josvanschouten/"
+  - label: "Twitter"
+    url: "https://twitter.com/josvanschouten"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

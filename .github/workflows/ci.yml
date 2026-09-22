@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Unit tests first: they are fast, and the contrast test is the one most
+      # likely to catch a well-meaning change to the palette.
+      - name: Unit tests
+        run: npm test
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Build-output tests
+        run: npm run test:build
+
+      - name: Accessibility scan
+        run: |
+          npx --yes serve dist --listen 4321 &
+          npx --yes wait-on http://localhost:4321 --timeout 60000
+          npx --yes @axe-core/cli http://localhost:4321 \
+            http://localhost:4321/sponsor \
+            http://localhost:4321/organisers \
+            http://localhost:4321/contact \
+            http://localhost:4321/code-of-conduct \
+            --exit
+
+      - name: Link check
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --verbose dist
+          fail: true
+
+      - name: Lighthouse
+        run: |
+          npx --yes @lhci/cli autorun \
+            --collect.staticDistDir=dist \
+            --collect.settings.preset=desktop \
+            --assert.assertions.categories:performance=off || true
+        # Budgets are enforced once a host is chosen and previews exist; see
+        # lighthouserc.json.
+
+  # Deploy previews are stubbed until a host is chosen (see docs/decisions.md).
+  # Cloudflare Pages / Netlify both wire in here as an extra job.

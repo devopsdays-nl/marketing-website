@@ -1,0 +1,10 @@
+name: "Tim Mamo"
+pronouns: "he/him"
+photo: "../../assets/organisers/tim.jpg"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/timothymamo/"
+  - label: "Twitter"
+    url: "https://twitter.com/timothymamo"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

@@ -1,0 +1,56 @@
+/**
+ * DevOpsDays Amsterdam design tokens.
+ *
+ * Colour values are taken from the vector logo artwork (DODA25-logos.zip), not
+ * sampled from a rasterised export. Every pairing in use is asserted by
+ * tests/contrast.test.ts, which parses this file directly — so changing a value
+ * here without checking contrast will fail the build.
+ *
+ * The rule that shapes the whole site: the logo orange is 2.84:1 on white. It can
+ * never be body text on a light surface. The site is therefore dark-first, orange
+ * is an accent and a fill, and light sections use --orange-ink instead.
+ */
+
+:root {
+  /* ---- Brand, straight from the SVG artwork ---- */
+  --orange: #E97D0E;
+  --orange-deep: #D05219;
+
+  /* Badge fills only. --orange-deep is too dark for ink text on top (4.36:1);
+     this lifted variant clears AA at 4.86:1 while staying visibly distinct. */
+  --orange-deep-fill: #D85C1C;
+
+  /* Orange TEXT on light surfaces. The raw orange fails there; this passes at
+     5.03:1 on --paper and 4.80:1 on pure white. */
+  --orange-ink: #A85312;
+
+  /* ---- Dark surfaces: the default ---- */
+  --ink: #131214;
+  --ink-deep: #0C0B0D;
+  --card: #1E1C1F;
+  --line: #302C31;
+  --text: #F7F3F0;
+  --text-muted: #B3A9A3;
+
+  /* ---- Light sections: used deliberately, roughly one per page ---- */
+  --paper: #FAF7F4;
+  --paper-line: #E8DFD8;
+  --paper-text: #3D3633;
+  --paper-muted: #6B5F59;
+
+  /* ---- Type ---- */
+  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --font-label: 'Jost', system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Labels echo the thin, widely spaced caps of the logo's own wordmark. */
+  --tracking-label: 0.22em;
+  --tracking-label-wide: 0.3em;
+
+  /* ---- Spacing and shape ---- */
+  --radius-pill: 999px;
+  --radius-card: 12px;
+  --tap-target-min: 44px;
+  --ring-width: 3px;
+}

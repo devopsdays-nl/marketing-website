@@ -1,0 +1,31 @@
+---
+/**
+ * The small label above every section heading. Jost, uppercase, widely tracked —
+ * echoing the thin spaced caps of the logo's own DEVOPSDAYS wordmark, which is
+ * what ties the type back to the brand.
+ */
+interface Props {
+  /** Set on light sections so the orange stays readable. */
+  tone?: 'dark' | 'light';
+}
+const { tone = 'dark' } = Astro.props;
+---
+
+<p class:list={['eyebrow', tone === 'light' && 'eyebrow--light']}><slot /></p>
+
+<style>
+  .eyebrow {
+    font-family: var(--font-label-family, var(--font-label));
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 0 0 0.75rem;
+  }
+
+  /* The raw orange fails contrast on light surfaces, so it darkens here. */
+  .eyebrow--light {
+    color: var(--orange-ink);
+  }
+</style>

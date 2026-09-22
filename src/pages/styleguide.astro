@@ -1,0 +1,238 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Logo from '../components/Logo.astro';
+import PersonCard from '../components/PersonCard.astro';
+import PlaceholderChip from '../components/PlaceholderChip.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import SessionBadge from '../components/SessionBadge.astro';
+import StatusPill from '../components/StatusPill.astro';
+import { getCurrentEdition } from '../lib/current-edition';
+import { EDITION_STATUSES, navItems, primaryCta } from '../lib/status';
+
+/**
+ * Internal reference, noindexed. Every component on one page, including the
+ * awkward cases — a person with no photo, a status with an empty nav.
+ */
+const edition = await getCurrentEdition();
+
+const SESSION_TYPES = ['talk', 'workshop', 'ignite', 'open-space', 'custom'] as const;
+const PILL_STATES = ['open', 'pending', 'tbc', 'confirmed'] as const;
+---
+
+<BaseLayout
+  title="Styleguide"
+  description="Internal component reference for the DevOpsDays Amsterdam site."
+  status={edition.status}
+  noindex={true}
+>
+  <section class="section">
+    <div class="wrap">
+      <SectionEyebrow>Internal</SectionEyebrow>
+      <h1>Styleguide</h1>
+      <p class="muted">
+        Not linked from anywhere and excluded from search engines. Every component lives here,
+        including the cases that are easy to forget.
+      </p>
+
+      <h2>Colour</h2>
+      <p class="muted">
+        Values come from the vector logo artwork. Every pairing below is asserted by
+        <code>tests/contrast.test.ts</code>, which parses <code>tokens.css</code> directly.
+      </p>
+      <ul class="swatches">
+        <li class="sw" style="background: var(--orange); color: var(--ink)">--orange<br />6.59:1</li>
+        <li class="sw" style="background: var(--orange-deep-fill); color: var(--ink)">--orange-deep-fill<br />4.86:1</li>
+        <li class="sw" style="background: var(--ink); color: var(--text)">--ink<br />16.93:1</li>
+        <li class="sw" style="background: var(--card); color: var(--text)">--card<br />14.77:1</li>
+        <li class="sw" style="background: var(--paper); color: var(--orange-ink)">--orange-ink<br />5.03:1</li>
+        <li class="sw" style="background: var(--paper); color: var(--paper-text)">--paper-text<br />11.09:1</li>
+      </ul>
+
+      <h2>Logo</h2>
+      <p class="muted">
+        The year has been stripped, so one asset set serves every edition. On dark surfaces the
+        letterforms are light and the orange survives — this is the designer's own artwork, not a
+        CSS filter.
+      </p>
+      <div class="logos">
+        <div class="logos__dark"><Logo width={220} alt="Wordmark on dark" /></div>
+        <div class="logos__light"><Logo width={220} tone="light" alt="Wordmark on light" /></div>
+        <div class="logos__light"><Logo width={220} variant="lockup" alt="Full lockup" /></div>
+      </div>
+
+      <h2>Buttons</h2>
+      <p class="muted">Minimum 44px target. Always a real &lt;a&gt; or &lt;button&gt;.</p>
+      <p class="row">
+        <Button href="#">Primary</Button>
+        <Button href="#" variant="outline">Outline</Button>
+        <Button href="#" variant="ghost">Ghost</Button>
+        <Button type="submit">Submit button</Button>
+      </p>
+
+      <h2>Placeholder chips</h2>
+      <p class="muted">
+        For any fact that is not yet known. Deliberately visible: it tells organisers which fields
+        are still theirs to fill.
+      </p>
+      <p class="row">
+        <PlaceholderChip>[DATES TBC]</PlaceholderChip>
+        <PlaceholderChip>[VENUE TBC]</PlaceholderChip>
+        <PlaceholderChip>[PRICE]</PlaceholderChip>
+      </p>
+
+      <h2>Status pills</h2>
+      <p class="row">
+        {PILL_STATES.map((state) => <StatusPill state={state}>{state}</StatusPill>)}
+      </p>
+
+      <h2>Session badges</h2>
+      <p class="row">
+        {SESSION_TYPES.map((type) => <SessionBadge type={type} />)}
+      </p>
+
+      <h2>Person card</h2>
+      <p class="muted">
+        The right-hand card has no photo. One speaker in the 2025 archive declares a photo that does
+        not exist, so this fallback is load-bearing, not decorative.
+      </p>
+      <ul class="people">
+        <li>
+          <PersonCard
+            name="Ada Lovelace"
+            secondary="she/her"
+            links={[{ label: 'Website', url: '#' }, { label: 'GitHub', url: '#' }]}
+          />
+        </li>
+        <li><PersonCard name="Grace Hopper" secondary="no photo on file" /></li>
+        <li><PersonCard name="Bram Vogelaar" secondary="no links at all" /></li>
+      </ul>
+
+      <h2>Status machine</h2>
+      <p class="muted">
+        What the nav and the primary action become at each stage. This table is generated from
+        <code>src/lib/status.ts</code>, so it cannot drift from the real thing.
+      </p>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>Status</th><th>Nav</th><th>Primary action</th></tr>
+          </thead>
+          <tbody>
+            {
+              EDITION_STATUSES.map((status) => (
+                <tr class={status === edition.status ? 'is-current' : undefined}>
+                  <td><code>{status}</code>{status === edition.status && ' ←'}</td>
+                  <td>{navItems(status).map((i) => i.label).join(', ') || <span class="muted">nothing</span>}</td>
+                  <td>{primaryCta(status)?.label ?? <span class="muted">none</span>}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  h2 {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .muted {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .swatches {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  }
+
+  .sw {
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius-card);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    border: 1px solid var(--line);
+  }
+
+  .logos {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+
+  .logos > div {
+    padding: 1.5rem;
+    border-radius: var(--radius-card);
+    display: grid;
+    place-items: center;
+  }
+
+  .logos__dark {
+    background: var(--ink);
+    border: 1px solid var(--line);
+  }
+
+  .logos__light {
+    background: var(--paper);
+  }
+
+  .people {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  }
+
+  .tablewrap {
+    overflow-x: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  th {
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.72rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .is-current {
+    background: var(--card);
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+</style>

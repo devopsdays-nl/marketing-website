@@ -1,0 +1,14 @@
+name: "Daniel Paulus"
+pronouns: "he/him"
+photo: "../../assets/organisers/daniel.jpg"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/danielpaulus/"
+  - label: "GitHub"
+    url: "https://github.com/PaulusTM"
+  - label: "Bluesky"
+    url: "https://bsky.app/profile/paulustm.bsky.social"
+  - label: "Website"
+    url: "https://danielpaulus.com"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

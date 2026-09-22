@@ -1,0 +1,107 @@
+---
+import Button from './Button.astro';
+import Logo from './Logo.astro';
+import { navItems, primaryCta, type EditionStatus } from '../lib/status';
+
+/**
+ * The nav is generated from the edition status, never hand-written. A menu item
+ * does not appear until it leads somewhere: no Propose link before the CFP opens,
+ * no Programme link before a programme exists.
+ */
+interface Props {
+  status: EditionStatus;
+}
+const { status } = Astro.props;
+
+const items = navItems(status);
+const cta = primaryCta(status);
+const path = Astro.url.pathname;
+---
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a href="/" class="nav__home">
+      <Logo width={52} alt="DevOpsDays Amsterdam — home" class="nav__logo" />
+    </a>
+
+    {
+      items.length > 0 && (
+        <nav aria-label="Main">
+          <ul class="nav__list">
+            {items.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={path === item.href ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+
+    {cta && <Button href={cta.href} variant="primary" class="nav__cta">{cta.label}</Button>}
+  </div>
+</header>
+
+<style>
+  .nav {
+    border-bottom: 1px solid var(--line);
+    background: var(--ink);
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    flex-wrap: wrap;
+    padding-block: 0.9rem;
+  }
+
+  .nav__home {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .nav__logo {
+    width: 52px;
+  }
+
+  .nav__list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.35rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav__list a {
+    display: inline-block;
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text);
+    padding-block: 0.4rem;
+  }
+
+  .nav__list a:hover,
+  .nav__list a[aria-current='page'] {
+    color: var(--orange);
+  }
+
+  .nav__cta {
+    margin-inline-start: auto;
+  }
+
+  @media (max-width: 40rem) {
+    .nav__cta {
+      margin-inline-start: 0;
+    }
+  }
+</style>

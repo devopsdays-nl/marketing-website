@@ -1,0 +1,8 @@
+name: "Stephan Mousset"
+pronouns: "he/him"
+photo: "../../assets/organisers/stephan.png"
+links:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/in/stephanmousset/"
+# Years this person helped organise. Add the next year when they return.
+editions: [2025]

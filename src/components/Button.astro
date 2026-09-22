@@ -1,0 +1,76 @@
+---
+/**
+ * Always a real <a> or <button>, never a div with a click handler.
+ *
+ * Primary is an orange fill with ink text, which is the only way orange can
+ * carry text and stay readable (6.59:1). Outline and ghost are for dark
+ * surfaces, where orange text is fine.
+ */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'outline' | 'ghost';
+  type?: 'button' | 'submit';
+  class?: string;
+}
+const { href, variant = 'primary', type = 'button', class: className } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  href={href}
+  type={href ? undefined : type}
+  class:list={['btn', `btn--${variant}`, className]}
+>
+  <slot />
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* 44px minimum target, per the accessibility bar. */
+    min-height: var(--tap-target-min);
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-label-family, var(--font-label));
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background-color 120ms ease, color 120ms ease;
+  }
+
+  .btn--primary {
+    background: var(--orange);
+    color: var(--ink);
+  }
+
+  .btn--primary:hover {
+    background: var(--orange-deep-fill);
+  }
+
+  .btn--outline {
+    background: transparent;
+    color: var(--orange);
+    border-color: var(--orange);
+  }
+
+  .btn--outline:hover {
+    background: var(--orange);
+    color: var(--ink);
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--line);
+  }
+
+  .btn--ghost:hover {
+    border-color: var(--text-muted);
+  }
+</style>

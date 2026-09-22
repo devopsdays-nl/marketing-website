@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import { getCurrentEdition } from '../lib/current-edition';
+
+const edition = await getCurrentEdition();
+
+/**
+ * Editions before this site existed. Their pages still live on devopsdays.org
+ * until the archive import runs, so we link out rather than pretend to host them.
+ *
+ * Figures here are counted from the real data in devopsdays/devopsdays-web, not
+ * estimated.
+ */
+const PAST = [
+  {
+    year: 2025,
+    ordinal: '13th',
+    venue: 'Pakhuis de Zwijger',
+    facts: '43 speakers · 17 workshops · 20 sponsors',
+    url: 'https://devopsdays.org/events/2025-amsterdam/welcome/',
+  },
+];
+---
+
+<BaseLayout
+  title="Past editions"
+  description="Every previous edition of DevOpsDays Amsterdam, running since 2013."
+  status={edition.status}
+>
+  <section class="section">
+    <div class="wrap">
+      <SectionEyebrow>Past editions</SectionEyebrow>
+      <h1>Thirteen editions so far</h1>
+      <p class="lede">
+        DevOpsDays Amsterdam has run since 2013. There was no edition in 2026. Older editions still
+        live on devopsdays.org and are being moved here.
+      </p>
+
+      <ul class="editions">
+        {
+          PAST.map((past) => (
+            <li class="edition">
+              <p class="edition__year">{past.year}</p>
+              <div>
+                <h2 class="edition__title">
+                  <a href={past.url}>The {past.ordinal} edition</a>
+                </h2>
+                <p class="edition__venue">{past.venue}</p>
+                <p class="edition__facts">{past.facts}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="note">
+        Editions from 2013 to 2024 are still on
+        <a href="https://devopsdays.org/">devopsdays.org</a>. We are importing them here, newest
+        first.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lede {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 48ch;
+  }
+
+  .editions {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 0;
+  }
+
+  .edition {
+    display: flex;
+    gap: 1.5rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .edition__year {
+    font-family: var(--font-heading-family, var(--font-heading));
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--orange);
+    margin: 0;
+    min-width: 4ch;
+  }
+
+  .edition__title {
+    font-size: 1.3rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .edition__title a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .edition__title a:hover {
+    color: var(--orange);
+    text-decoration: underline;
+  }
+
+  .edition__venue {
+    margin: 0 0 0.25rem;
+  }
+
+  .edition__facts {
+    font-family: var(--font-label-family, var(--font-label));
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .note {
+    margin-top: 2rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+</style>
