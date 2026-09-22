@@ -14,11 +14,9 @@ const organisers = (await getCollection('organisers')).sort((a, b) =>
 );
 
 /**
- * The team listed here is the one that ran the last edition. We do not present it
- * as the 2027 team, because that team is still forming — saying otherwise would
- * be stating something we cannot stand behind.
+ * These are the people who have organised the event. The team for the coming
+ * edition is still forming, so the page does not present this as that team.
  */
-const lastEdition = Math.max(...organisers.flatMap((o) => o.data.editions), 0);
 ---
 
 <BaseLayout
@@ -39,10 +37,9 @@ const lastEdition = Math.max(...organisers.flatMap((o) => o.data.editions), 0);
 
   <section class="section">
     <div class="wrap">
-      <h2>The {lastEdition} team</h2>
+      <h2>The team</h2>
       <p class="muted">
-        This is the team that ran the {lastEdition} edition. The team for {edition.year} is still
-        forming, and this page is updated once it is settled.
+        The team for {edition.year} is still forming. This page is updated once it is settled.
       </p>
 
       <ul class="people">
@@ -89,7 +86,7 @@ const lastEdition = Math.max(...organisers.flatMap((o) => o.data.editions), 0);
       <p class="muted">
         DevOpsDays worldwide is coordinated by a volunteer core team, separate from the Amsterdam
         organisers. They are listed on
-        <a href="https://devopsdays.org/about/">devopsdays.org</a>.
+        <a href="https://devopsdays.org/about/" target="_blank" rel="noopener noreferrer">devopsdays.org</a>.
       </p>
     </div>
   </section>

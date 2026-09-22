@@ -8,6 +8,7 @@ import Icon from '../components/Icon.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import StatusPill from '../components/StatusPill.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SOCIALS } from '../config/site';
 import { homeSections, primaryCta } from '../lib/status';
 import { whereThingsStand } from '../lib/status-rows';
 import type { Edition } from '../lib/edition';
@@ -29,7 +30,7 @@ const rows = whereThingsStand(current, new Date());
 const FORMAT = [
   {
     title: 'A day of workshops',
-    body: 'Day one is hands-on. Parallel sessions in small rooms, capped so you can actually ask a question. In 2025 we ran 17 of them.',
+    body: 'Day one is hands-on. Parallel sessions in small rooms, capped small enough that you can actually ask a question.',
   },
   {
     title: 'Two days of talks and Ignites',
@@ -74,12 +75,12 @@ const FORMAT = [
             </p>
 
             <p class="hero__lede">
-              After a year off, we are coming back for the {current.ordinal} edition.
+              DevOpsDays is coming back to Amsterdam for its {current.ordinal} edition.
             </p>
             <p class="hero__body">
-              Three days in Amsterdam for the people who build, run and look after software.
-              Workshops, a single track of talks, and Open Spaces where the agenda is yours.
-              We are working on dates and a venue now.
+              Three days for the people who build, run and look after software. Workshops, a single
+              track of talks, and Open Spaces where the agenda is yours. Full details for {current.year}
+              will be announced soon.
             </p>
 
             <p class="hero__actions">
@@ -133,8 +134,8 @@ const FORMAT = [
           <SectionEyebrow tone="light">What to expect</SectionEyebrow>
           <h2>The format is the part we already know</h2>
           <p class="section__intro">
-            We cannot tell you who is speaking yet. We can tell you exactly how the three days work,
-            because that has not changed in thirteen editions.
+            We cannot tell you who is speaking yet. We can tell you exactly how the three days
+            work, because that part does not change.
           </p>
 
           <div class="cards">
@@ -159,19 +160,27 @@ const FORMAT = [
 
           <div class="cards">
             <article class="card card--dark">
-              <h3>Watch 2025</h3>
-              <p>Forty-three speakers across three days. Every talk was recorded.</p>
-              <p><a href="https://www.youtube.com/@devopsAmsterdam">Recordings on YouTube</a></p>
+              <h3>Watch the talks</h3>
+              <p>Talks from previous editions are recorded and free to watch.</p>
+              <p>
+                <a href="https://www.youtube.com/@devopsAmsterdam" target="_blank" rel="noopener noreferrer">
+                  Recordings on YouTube
+                </a>
+              </p>
             </article>
             <article class="card card--dark">
               <h3>Browse the archive</h3>
-              <p>Programmes, speakers and slides from previous editions.</p>
+              <p>Programmes, speakers and slides from every past edition.</p>
               <p><a href="/archive">Past editions</a></p>
             </article>
             <article class="card card--dark">
               <h3>Come to a meetup</h3>
               <p>DevOps Amsterdam meets through the year, between editions.</p>
-              <p><a href="https://www.meetup.com/DevOpsAmsterdam/">Join the meetup group</a></p>
+              <p>
+                <a href="https://www.meetup.com/DevOpsAmsterdam/" target="_blank" rel="noopener noreferrer">
+                  Join the meetup group
+                </a>
+              </p>
             </article>
           </div>
         </div>
@@ -191,30 +200,16 @@ const FORMAT = [
           </p>
 
           <ul class="channels">
-            <li>
-              <a href="https://www.meetup.com/DevOpsAmsterdam/">
-                <Icon name="meetup" />
-                <span>Meetup</span>
-              </a>
-            </li>
-            <li>
-              <a href="https://www.linkedin.com/company/devopsams" rel="me noopener">
-                <Icon name="linkedin" />
-                <span>LinkedIn</span>
-              </a>
-            </li>
-            <li>
-              <a href="https://mastodon.social/@devopsams" rel="me noopener">
-                <Icon name="mastodon" />
-                <span>Mastodon</span>
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/devopsams.bsky.social" rel="me noopener">
-                <Icon name="bluesky" />
-                <span>Bluesky</span>
-              </a>
-            </li>
+            {
+              SOCIALS.map((social) => (
+                <li>
+                  <a href={social.url} target="_blank" rel="noopener noreferrer">
+                    <Icon name={social.icon} />
+                    <span>{social.label}</span>
+                  </a>
+                </li>
+              ))
+            }
             <li>
               <a href={`mailto:${current.organiserEmail}`}>
                 <Icon name="email" />

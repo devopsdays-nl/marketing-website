@@ -163,6 +163,55 @@ describe('the primary call to action actually goes somewhere', () => {
   });
 });
 
+describe('the site reads as evergreen, not as a 2025 retrospective', () => {
+  const PAGES = ['index', 'sponsor', 'organisers', 'contact'];
+
+  it.each(PAGES)('%s does not lean on a specific past edition', (page) => {
+    const file = page === 'index' ? 'index.html' : `${page}/index.html`;
+    const body = readFileSync(join(DIST, file), 'utf8');
+    const main = /<main[\s\S]*?<\/main>/.exec(body)?.[0] ?? '';
+
+    // The archive is exempt: listing past editions is the point of that page.
+    expect(main, 'mentions the cancelled edition').not.toMatch(/\b2026\b/);
+    expect(main, 'dates its claims to one past year').not.toMatch(/\bin 2025\b|\b2025 edition\b/);
+  });
+
+  it('does not mention the year off anywhere', () => {
+    for (const page of PAGES) {
+      const file = page === 'index' ? 'index.html' : `${page}/index.html`;
+      const body = readFileSync(join(DIST, file), 'utf8');
+      expect(body, page).not.toMatch(/year off|cancelled|canceled/i);
+    }
+  });
+});
+
+describe('markup stays lean', () => {
+  it('no element carries duplicated Astro scope classes', () => {
+    // Spreading a props object onto an element makes Astro append its scoped
+    // class names once per style block. It added ~5KB of duplicates here.
+    for (const attr of html.match(/class="astro-[^"]*"/g) ?? []) {
+      const names = attr.split(/\s+/);
+      expect(new Set(names).size, `duplicated classes: ${attr.slice(0, 80)}`).toBe(names.length);
+    }
+  });
+});
+
+describe('links that leave the site open in a new tab', () => {
+  it.each(['index', 'contact', 'organisers', 'archive', 'code-of-conduct', 'conference-buddy'])(
+    '%s',
+    (page) => {
+      const file = page === 'index' ? 'index.html' : `${page}/index.html`;
+      const body = readFileSync(join(DIST, file), 'utf8');
+
+      for (const tag of body.match(/<a[^>]*href="https?:\/\/[^"]*"[^>]*>/g) ?? []) {
+        expect(tag, `stays in the same tab: ${tag.slice(0, 90)}`).toContain('target="_blank"');
+        // Without noopener a new tab can reach back into this one via window.opener.
+        expect(tag, `missing rel=noopener: ${tag.slice(0, 90)}`).toMatch(/rel="[^"]*noopener/);
+      }
+    },
+  );
+});
+
 describe('indexing', () => {
   it('does not noindex ordinary content pages', () => {
     const conduct = readFileSync(join(DIST, 'code-of-conduct/index.html'), 'utf8');

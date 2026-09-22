@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { SITE, absoluteUrl } from '../src/config/site';
+import { SITE, SOCIALS, absoluteUrl } from '../src/config/site';
 
 /**
  * The domain is deliberately undecided (see the plan). Everything that needs it
@@ -46,5 +46,40 @@ describe('SITE metadata', () => {
   it('does not claim a launch domain yet', () => {
     // Guards against someone quietly hardcoding a real domain before it is agreed.
     expect(SITE.domainDecided).toBe(false);
+  });
+});
+
+describe('SOCIALS', () => {
+  /**
+   * These URLs were previously copied into three separate files and drifted out
+   * of date in two of them. They live in one place now, and these tests pin the
+   * handles so a bad copy-paste fails rather than shipping a dead profile link.
+   */
+  it('points at the event-owned Mastodon instance', () => {
+    const mastodon = SOCIALS.find((s) => s.icon === 'mastodon');
+    expect(mastodon?.url).toBe('https://social.devopsdays.org/@amsterdam');
+  });
+
+  it('points at the amsterdam.devopsdays.org Bluesky handle', () => {
+    const bluesky = SOCIALS.find((s) => s.icon === 'bluesky');
+    expect(bluesky?.url).toBe('https://bsky.app/profile/amsterdam.devopsdays.org');
+  });
+
+  it('is every link absolute and https', () => {
+    for (const social of SOCIALS) {
+      expect(new URL(social.url).protocol, social.label).toBe('https:');
+    }
+  });
+
+  it('gives every entry an icon the Icon component can draw', () => {
+    const drawable = ['meetup', 'mastodon', 'bluesky', 'linkedin', 'email'];
+    for (const social of SOCIALS) {
+      expect(drawable, `no icon for ${social.label}`).toContain(social.icon);
+    }
+  });
+
+  it('lists no duplicate destinations', () => {
+    const urls = SOCIALS.map((s) => s.url);
+    expect(new Set(urls).size).toBe(urls.length);
   });
 });

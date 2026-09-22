@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../config/site';
+import { SITE, SOCIALS } from '../config/site';
 
 /**
  * The Code of Conduct is linked here, which puts it on the footer of every single
@@ -8,13 +8,6 @@ import { SITE } from '../config/site';
  * Past editions live down here too: the archive should not compete with the
  * current edition for attention in the top bar.
  */
-const SOCIALS = [
-  { label: 'LinkedIn', url: 'https://www.linkedin.com/company/devopsams' },
-  { label: 'Mastodon', url: 'https://mastodon.social/@devopsams' },
-  { label: 'Bluesky', url: 'https://bsky.app/profile/devopsams.bsky.social' },
-  { label: 'YouTube', url: 'https://www.youtube.com/@devopsAmsterdam' },
-  { label: 'Meetup', url: 'https://www.meetup.com/DevOpsAmsterdam/' },
-];
 ---
 
 <footer class="foot">
@@ -39,7 +32,13 @@ const SOCIALS = [
 
     <nav aria-label="Social">
       <ul class="foot__list">
-        {SOCIALS.map((s) => <li><a href={s.url} rel="me noopener">{s.label}</a></li>)}
+        {SOCIALS.map((s) => (
+          <li>
+            <a href={s.url} target="_blank" rel="noopener noreferrer">
+              {s.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   </div>

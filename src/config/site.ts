@@ -41,3 +41,58 @@ export function absoluteUrl(path: string): string {
   const suffix = path.startsWith('/') ? path : `/${path}`;
   return `${SITE.url}${suffix}`;
 }
+
+export interface Social {
+  label: string;
+  url: string;
+  icon: 'meetup' | 'mastodon' | 'bluesky' | 'linkedin' | 'email';
+  /** Shown where there is room for it, e.g. the contact page. */
+  handle: string;
+}
+
+/**
+ * Where to find the event elsewhere.
+ *
+ * Defined once. These were previously copied into the footer, the home page and
+ * the contact page, and two of the three drifted to out-of-date handles before
+ * anyone noticed.
+ */
+export const SOCIALS: Social[] = [
+  {
+    label: 'Meetup',
+    url: 'https://www.meetup.com/DevOpsAmsterdam/',
+    icon: 'meetup',
+    handle: 'DevOpsAmsterdam',
+  },
+  {
+    label: 'LinkedIn',
+    url: 'https://www.linkedin.com/company/devopsams',
+    icon: 'linkedin',
+    handle: '/company/devopsams',
+  },
+  {
+    label: 'Mastodon',
+    url: 'https://social.devopsdays.org/@amsterdam',
+    icon: 'mastodon',
+    handle: '@amsterdam@social.devopsdays.org',
+  },
+  {
+    label: 'Bluesky',
+    url: 'https://bsky.app/profile/amsterdam.devopsdays.org',
+    icon: 'bluesky',
+    handle: 'amsterdam.devopsdays.org',
+  },
+];
+
+/**
+ * Links that leave the site are written with target="_blank" and
+ * rel="noopener noreferrer" directly in the markup, and Markdown content gets
+ * the same treatment automatically via rehype-external-links (see
+ * astro.config.mjs).
+ *
+ * Deliberately not a shared object spread onto <a>: spreading makes Astro treat
+ * the element as dynamic, and it then appends its scoped-style class names once
+ * per style block. That added ~5KB of duplicated class attributes to the home
+ * page. tests/build/output.test.ts asserts both the new-tab behaviour and that
+ * no such class soup comes back.
+ */

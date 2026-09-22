@@ -31,10 +31,10 @@ const PAST = [
   <section class="section">
     <div class="wrap">
       <SectionEyebrow>Past editions</SectionEyebrow>
-      <h1>Thirteen editions so far</h1>
+      <h1>Past editions</h1>
       <p class="lede">
-        DevOpsDays Amsterdam has run since 2013. There was no edition in 2026. Older editions still
-        live on devopsdays.org and are being moved here.
+        DevOpsDays Amsterdam has run since 2013. Earlier editions still live on devopsdays.org and
+        are being moved here.
       </p>
 
       <ul class="editions">
@@ -44,7 +44,7 @@ const PAST = [
               <p class="edition__year">{past.year}</p>
               <div>
                 <h2 class="edition__title">
-                  <a href={past.url}>The {past.ordinal} edition</a>
+                  <a href={past.url} target="_blank" rel="noopener noreferrer">The {past.ordinal} edition</a>
                 </h2>
                 <p class="edition__venue">{past.venue}</p>
                 <p class="edition__facts">{past.facts}</p>
@@ -55,9 +55,9 @@ const PAST = [
       </ul>
 
       <p class="note">
-        Editions from 2013 to 2024 are still on
-        <a href="https://devopsdays.org/">devopsdays.org</a>. We are importing them here, newest
-        first.
+        Earlier editions are still on
+        <a href="https://devopsdays.org/" target="_blank" rel="noopener noreferrer">devopsdays.org</a>. We are importing
+        them here, newest first.
       </p>
     </div>
   </section>

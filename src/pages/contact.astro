@@ -1,18 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
-import { SITE } from '../config/site';
+import { SITE, SOCIALS } from '../config/site';
 import { getCurrentEdition } from '../lib/current-edition';
 
 const edition = await getCurrentEdition();
 
-const CHANNELS = [
-  { label: 'LinkedIn', handle: '/company/devopsams', url: 'https://www.linkedin.com/company/devopsams' },
-  { label: 'Mastodon', handle: '@devopsams', url: 'https://mastodon.social/@devopsams' },
-  { label: 'Bluesky', handle: 'devopsams.bsky.social', url: 'https://bsky.app/profile/devopsams.bsky.social' },
-  { label: 'YouTube', handle: '@devopsAmsterdam', url: 'https://www.youtube.com/@devopsAmsterdam' },
-  { label: 'Meetup', handle: 'DevOpsAmsterdam', url: 'https://www.meetup.com/DevOpsAmsterdam/' },
-];
 ---
 
 <BaseLayout
@@ -42,9 +35,9 @@ const CHANNELS = [
       <h2>Elsewhere</h2>
       <ul class="channels">
         {
-          CHANNELS.map((c) => (
+          SOCIALS.map((c) => (
             <li>
-              <a href={c.url} rel="me noopener">
+              <a href={c.url} target="_blank" rel="noopener noreferrer">
                 <span class="channels__label">{c.label}</span>
                 <span class="channels__handle">{c.handle}</span>
               </a>

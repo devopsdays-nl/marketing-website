@@ -1,5 +1,7 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
+import rehypeExternalLinks from 'rehype-external-links';
 
 import { SITE } from './src/config/site.ts';
 
@@ -21,6 +23,22 @@ import { SITE } from './src/config/site.ts';
 export default defineConfig({
   site: SITE.url,
   output: 'static',
+
+  markdown: {
+    /**
+     * Astro 7 defaults to Sätteri; @astrojs/markdown-remark restores the
+     * unified pipeline so rehype plugins run.
+     *
+     * Every link out of the site opens in a new tab. Doing it here rather than
+     * per-link means content pages get it automatically — an organiser adding a
+     * link in Markdown does not have to know about it.
+     */
+    processor: unified({
+      rehypePlugins: [
+        [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }],
+      ],
+    }),
+  },
 
   fonts: [
     {

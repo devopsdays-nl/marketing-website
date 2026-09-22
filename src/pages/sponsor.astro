@@ -9,8 +9,7 @@ import { getCurrentEdition } from '../lib/current-edition';
 const edition = await getCurrentEdition();
 
 /**
- * Tiers and their limits come from data/events/2025/amsterdam/main.yml.
- * The 2025 counts are counted from the same file.
+ * Tiers and their limits are the ones the event runs.
  *
  * Benefits are only stated where devopsdays-web states them. The live sponsor
  * copy says exactly two things about what a tier includes: Gold gets a full
@@ -22,11 +21,11 @@ const edition = await getCurrentEdition();
  * is commented out, so it is not current policy.
  */
 const TIERS = [
-  { id: 'gold', label: 'Gold', max: 8, taken2025: 6, benefit: 'A full table, to talk to people during the breaks.' },
-  { id: 'silver', label: 'Silver', max: 8, taken2025: 5, benefit: 'A standing table, to talk to people during the breaks.' },
-  { id: 'bronze', label: 'Bronze', max: 10, taken2025: 7, benefit: null },
-  { id: 'coffee', label: 'Coffee', max: 1, taken2025: 1, benefit: null },
-  { id: 'lanyard', label: 'Lanyard', max: 1, taken2025: 1, benefit: null },
+  { id: 'gold', label: 'Gold', max: 8, benefit: 'A full table, to talk to people during the breaks.' },
+  { id: 'silver', label: 'Silver', max: 8, benefit: 'A standing table, to talk to people during the breaks.' },
+  { id: 'bronze', label: 'Bronze', max: 10, benefit: null },
+  { id: 'coffee', label: 'Coffee', max: 1, benefit: null },
+  { id: 'lanyard', label: 'Lanyard', max: 1, benefit: null },
 ];
 ---
 
@@ -56,10 +55,6 @@ const TIERS = [
     <div class="wrap">
       <SectionEyebrow tone="light">Tiers</SectionEyebrow>
       <h2>What is available</h2>
-      <p class="intro">
-        These are the tiers we ran in 2025. Prices for {edition.year} are being set now.
-      </p>
-
       <ul class="tiers">
         {
           TIERS.map((tier) => (
@@ -79,11 +74,7 @@ const TIERS = [
                 )
               }
               <p class="tier__meta">
-                {tier.max === 1
-                  ? 'One sponsor only'
-                  : `Up to ${tier.max} sponsors`}
-                {' · '}
-                {tier.taken2025} took this tier in 2025
+                {tier.max === 1 ? 'One sponsor only' : `Up to ${tier.max} sponsors`}
               </p>
             </li>
           ))
@@ -110,8 +101,8 @@ const TIERS = [
         their own terms.
       </p>
       <p>
-        The 2025 edition ran three days at Pakhuis de Zwijger with 43 speakers, 17 workshops and 20
-        sponsors. Two of those days were a single track, so everyone in the room saw the same talks.
+        The event runs over three days, two of them a single track — so everyone in the room sees
+        the same talks, and walks past the same people between them.
       </p>
       <p>
         A prospectus with audience numbers and the benefit breakdown for {edition.year} is
@@ -119,7 +110,7 @@ const TIERS = [
         it exists.
       </p>
       <p>
-        You can also look at <a href="/archive">previous editions</a> to see who sponsored before.
+        You can also look at <a href="/archive">past editions</a> to see who has sponsored before.
       </p>
     </div>
   </section>
