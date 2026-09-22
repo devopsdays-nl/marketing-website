@@ -8,7 +8,7 @@
 export type Tokens = Record<string, string>;
 
 /** Expands #abc to #aabbcc and upper-cases, so comparisons are stable. */
-export function normaliseHex(hex: string): string {
+function normaliseHex(hex: string): string {
   const raw = hex.trim().replace(/^#/, '');
   const expanded =
     raw.length === 3
@@ -25,7 +25,7 @@ export function normaliseHex(hex: string): string {
 }
 
 /** Relative luminance, per WCAG 2.1 definition. */
-export function relativeLuminance(hex: string): number {
+function relativeLuminance(hex: string): number {
   const value = normaliseHex(hex).slice(1);
   const [r, g, b] = [0, 2, 4].map((i) => {
     const channel = parseInt(value.slice(i, i + 2), 16) / 255;

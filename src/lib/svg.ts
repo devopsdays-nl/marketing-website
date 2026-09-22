@@ -26,20 +26,6 @@ export function stripYear(svg: string): string {
   return withoutText.replace(/\.st\d+\s*\{\s*font-family\s*:[^}]*\}/g, '');
 }
 
-/**
- * Rewrites colour values inside the <style> block only, leaving clip-path and
- * gradient references alone.
- */
-export function recolour(svg: string, mapping: Record<string, string>): string {
-  return svg.replace(/<style[^>]*>([\s\S]*?)<\/style>/, (match, body: string) => {
-    let next = body;
-    for (const [from, to] of Object.entries(mapping)) {
-      next = next.replace(new RegExp(from, 'gi'), to);
-    }
-    return match.replace(body, next);
-  });
-}
-
 /** Strips the fixed width/height Illustrator adds, so the SVG scales fluidly. */
 export function makeFluid(svg: string): string {
   return svg.replace(/<svg([^>]*)>/, (_match, attrs: string) =>

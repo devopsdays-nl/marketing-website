@@ -81,14 +81,29 @@ describe('accessibility floor', () => {
   });
 
   it('gives every image an alt attribute', () => {
-    for (const tag of html.match(/<img[^>]*>/g) ?? []) {
+    const images = html.match(/<img[^>]*>/g) ?? [];
+    expect(images.length, 'no images found — this test would pass vacuously').toBeGreaterThan(0);
+    for (const tag of images) {
       expect(tag, `missing alt: ${tag}`).toMatch(/\salt="/);
     }
   });
 
   it('gives every link an accessible name', () => {
-    for (const tag of html.match(/<a[^>]*>\s*<\/a>/g) ?? []) {
-      expect(tag, `empty link: ${tag}`).toMatch(/aria-label=/);
+    // Two bugs lived here. It used to check only links that were already empty,
+    // which no page has, so it could never fail. And `<a[^>]*>` also matches
+    // <article>, <aside> and <abbr> — an emptied link was being swallowed into a
+    // match that started at <article>. Hence `<a\s`.
+    const links = html.match(/<a\s[^>]*>[\s\S]*?<\/a>/g) ?? [];
+    expect(links.length).toBeGreaterThan(0);
+
+    for (const tag of links) {
+      const hasText = /<a\s[^>]*>([\s\S]*?)<\/a>/.exec(tag)?.[1]?.replace(/<[^>]*>/g, '').trim();
+      const hasLabel = /aria-label="[^"]+"/.test(tag);
+      const hasImageAlt = /<img[^>]*\salt="[^"]+"/.test(tag);
+      expect(
+        Boolean(hasText) || hasLabel || hasImageAlt,
+        `link has no accessible name: ${tag.slice(0, 100)}`,
+      ).toBe(true);
     }
   });
 });
@@ -115,13 +130,15 @@ describe('no invented facts', () => {
     expect(html).not.toMatch(/[€$£]\s?\d/);
   });
 
-  it('only claims figures that are verifiable in the 2025 archive data', () => {
-    // 43 speakers and 17 workshops are counted from devopsdays-web. The brief's
-    // "18 sponsors" and "16 workshops" are both wrong, so they must not appear.
-    if (html.includes('workshops')) {
-      expect(html, 'the archive has 17 workshops, not 16').not.toMatch(/\b16\s+(of them|workshops)/);
-    }
-    expect(html, 'the archive has 20 sponsors, not 18').not.toMatch(/\b18\s+sponsors/);
+  it('quotes only figures that are verifiable in the source data', () => {
+    // The figures live on /archive now. Counted from devopsdays-web: 43 speakers,
+    // 17 workshops, 20 sponsors. The brief's "18 sponsors" and "16 workshops"
+    // are both wrong, so they must never appear.
+    const archive = readFileSync(join(DIST, 'archive/index.html'), 'utf8');
+    expect(archive, 'the archive has 17 workshops, not 16').not.toMatch(/\b16 workshops\b/);
+    expect(archive, 'the archive has 20 sponsors, not 18').not.toMatch(/\b18 sponsors\b/);
+    // And prove the real ones are actually there, so this cannot pass vacuously.
+    expect(archive).toMatch(/\b43 speakers\b/);
   });
 });
 
@@ -150,7 +167,7 @@ describe('the primary call to action actually goes somewhere', () => {
   });
 
   it('sends the primary action to a section that exists on this page', () => {
-    const cta = /<a[^>]*class="btn btn--primary[^"]*"[^>]*>/.exec(html)?.[0] ?? '';
+    const cta = /<a\s[^>]*class="btn btn--primary[^"]*"[^>]*>/.exec(html)?.[0] ?? '';
     const href = /href="([^"]*)"/.exec(cta)?.[1] ?? '';
     expect(href).toBe('#stay-in-touch');
     expect(html).toContain('id="stay-in-touch"');
@@ -203,7 +220,7 @@ describe('links that leave the site open in a new tab', () => {
       const file = page === 'index' ? 'index.html' : `${page}/index.html`;
       const body = readFileSync(join(DIST, file), 'utf8');
 
-      for (const tag of body.match(/<a[^>]*href="https?:\/\/[^"]*"[^>]*>/g) ?? []) {
+      for (const tag of body.match(/<a\s[^>]*href="https?:\/\/[^"]*"[^>]*>/g) ?? []) {
         expect(tag, `stays in the same tab: ${tag.slice(0, 90)}`).toContain('target="_blank"');
         // Without noopener a new tab can reach back into this one via window.opener.
         expect(tag, `missing rel=noopener: ${tag.slice(0, 90)}`).toMatch(/rel="[^"]*noopener/);

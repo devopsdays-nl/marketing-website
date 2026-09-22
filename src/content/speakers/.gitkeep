@@ -1,0 +1,6 @@
+Content for this collection arrives with the pretalx import (speakers, sessions)
+and the sponsor sign-ups. The directory is committed so the content loader does
+not warn on every build.
+
+Do not put a README.md here: the loader glob matches **/*.md and would try to
+parse it as content. See docs/adding-content.md for the file format.

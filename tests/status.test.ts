@@ -4,7 +4,6 @@ import {
   EDITION_STATUSES,
   type EditionStatus,
   homeSections,
-  isPublic,
   navItems,
   primaryCta,
   resolveCtaHref,
@@ -162,24 +161,6 @@ describe('the primary call to action', () => {
   });
 });
 
-describe('isPublic', () => {
-  it('is false exactly when the edition should not occupy the home page', () => {
-    expect(isPublic('planning')).toBe(false);
-    expect(isPublic('archived')).toBe(false);
-    for (const status of ['announced', 'cfp-open', 'tickets-open', 'live'] as const) {
-      expect(isPublic(status), status).toBe(true);
-    }
-  });
-
-  it('agrees with navItems and homeSections about whether anything renders', () => {
-    for (const status of EDITION_STATUSES) {
-      expect(homeSections(status).length > 0, `homeSections disagrees for "${status}"`).toBe(
-        isPublic(status),
-      );
-    }
-  });
-});
-
 describe('the status list itself', () => {
   it('covers exactly the six states in the brief, in lifecycle order', () => {
     expect(EDITION_STATUSES).toEqual([
@@ -198,7 +179,6 @@ describe('the status list itself', () => {
         navItems(status);
         homeSections(status);
         primaryCta(status);
-        isPublic(status);
       }, status).not.toThrow();
     }
   });

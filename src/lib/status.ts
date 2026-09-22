@@ -55,15 +55,6 @@ const NAV = {
 } as const satisfies Record<string, NavItem>;
 
 /**
- * Whether this edition should occupy the home page and appear in navigation.
- * `planning` means the previous edition is still on /; `archived` means the next
- * one has taken over and this edition has rolled to /archive/[year].
- */
-export function isPublic(status: EditionStatus): boolean {
-  return status !== 'planning' && status !== 'archived';
-}
-
-/**
  * Top bar contents. Archive is promoted into the nav during the quiet period
  * before a programme exists, because past editions are then the most useful
  * thing the site can offer; once the edition is live it returns to the footer
