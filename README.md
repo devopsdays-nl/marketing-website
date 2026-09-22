@@ -157,16 +157,32 @@ guards and confirming the suite fails.
 
 ## Deployment
 
-Pushing to `main` builds and publishes to GitHub Pages via
-`.github/workflows/deploy.yml`. Every pull request runs the full check suite in
-`.github/workflows/ci.yml`: tests, typecheck, build, axe, link check and Lighthouse.
+Hosted on **Cloudflare Pages**, which deploys straight from this private repo, so
+the code stays closed while the site is publicly shareable.
 
-The site's public URL comes from one constant, `SITE.url` in `src/config/site.ts`,
-and the base path from `BASE_PATH` in CI. Moving to a real domain later is a
-one-line change plus a DNS record — every canonical, sitemap and Open Graph URL
-follows automatically.
+Every push to `main` publishes; every pull request gets its own preview URL.
 
----
+**Build settings** (set once in the Cloudflare dashboard, under
+Workers & Pages → the project → Settings → Build):
+
+| Setting | Value |
+| --- | --- |
+| Framework preset | Astro |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node version | read from `.nvmrc` (22.12.0) |
+
+**Environment variable.** Set `SITE_URL` to the site's real origin, with no
+trailing slash — e.g. `https://devopsdays-amsterdam.pages.dev`, or the custom
+domain once there is one. Everything derived from it (canonical URLs, Open Graph
+tags, the sitemap) follows automatically. Left unset, the build falls back to a
+placeholder that is deliberately not a real domain.
+
+Pull requests also run the full check suite in `.github/workflows/ci.yml`: unit
+tests, typecheck, build, build-output tests, axe, link check and Lighthouse.
+
+Moving to a custom domain later is a DNS record plus updating `SITE_URL` — no code
+change.
 
 ## Open decisions
 

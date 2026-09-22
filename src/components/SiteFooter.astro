@@ -1,6 +1,5 @@
 ---
 import { SITE, SOCIALS } from '../config/site';
-import { joinBase } from '../lib/url';
 
 /**
  * The Code of Conduct is linked here, which puts it on the footer of every single
@@ -23,11 +22,11 @@ import { joinBase } from '../lib/url';
 
     <nav aria-label="Footer">
       <ul class="foot__list">
-        <li><a href={joinBase('/code-of-conduct')}>Code of Conduct</a></li>
-        <li><a href={joinBase('/conference-buddy')}>Conference Buddy</a></li>
-        <li><a href={joinBase('/organisers')}>Organisers</a></li>
-        <li><a href={joinBase('/archive')}>Past editions</a></li>
-        <li><a href={joinBase('/contact')}>Contact</a></li>
+        <li><a href="/code-of-conduct">Code of Conduct</a></li>
+        <li><a href="/conference-buddy">Conference Buddy</a></li>
+        <li><a href="/organisers">Organisers</a></li>
+        <li><a href="/archive">Past editions</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
     </nav>
 

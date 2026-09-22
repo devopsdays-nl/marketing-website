@@ -2,7 +2,6 @@
 import Button from './Button.astro';
 import Logo from './Logo.astro';
 import { navItems, primaryCta, resolveCtaHref, type EditionStatus } from '../lib/status';
-import { joinBase } from '../lib/url';
 
 /**
  * The nav is generated from the edition status, never hand-written. A menu item
@@ -21,7 +20,7 @@ const path = Astro.url.pathname;
 
 <header class="nav">
   <div class="wrap nav__inner">
-    <a href={joinBase('/')} class="nav__home">
+    <a href="/" class="nav__home">
       <Logo width={52} alt="DevOpsDays Amsterdam — home" class="nav__logo" />
     </a>
 
@@ -32,8 +31,8 @@ const path = Astro.url.pathname;
             {items.map((item) => (
               <li>
                 <a
-                  href={joinBase(item.href)}
-                  aria-current={path === joinBase(item.href) ? 'page' : undefined}
+                  href={item.href}
+                  aria-current={path === item.href ? 'page' : undefined}
                 >
                   {item.label}
                 </a>
@@ -46,7 +45,7 @@ const path = Astro.url.pathname;
 
     {
       cta && (
-        <Button href={joinBase(resolveCtaHref(cta.href, path))} variant="primary" class="nav__cta">
+        <Button href={resolveCtaHref(cta.href, path)} variant="primary" class="nav__cta">
           {cta.label}
         </Button>
       )

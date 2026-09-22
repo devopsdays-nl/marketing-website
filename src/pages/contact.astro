@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import { SITE, SOCIALS } from '../config/site';
 import { getCurrentEdition } from '../lib/current-edition';
-import { joinBase } from '../lib/url';
 
 const edition = await getCurrentEdition();
 
@@ -49,7 +48,7 @@ const edition = await getCurrentEdition();
 
       <h2>Sponsoring</h2>
       <p>
-        Sponsorship is open now. The <a href={joinBase('/sponsor')}>sponsor page</a> has the tiers and what each
+        Sponsorship is open now. The <a href="/sponsor">sponsor page</a> has the tiers and what each
         one includes, or just email us.
       </p>
     </div>

@@ -11,8 +11,6 @@
  * conference site look abandoned.
  */
 
-import { isHomePath } from './url';
-
 export const EDITION_STATUSES = [
   'planning',
   'announced',
@@ -152,6 +150,6 @@ export function primaryCta(status: EditionStatus): CallToAction | null {
 export function resolveCtaHref(href: string, pathname: string): string {
   if (!href.startsWith('#')) return href;
 
-  // Under a base path the home page is "/marketing-website/", not "/".
-  return isHomePath(pathname) ? href : `/${href}`;
+  const onHome = pathname === '/' || pathname === '';
+  return onHome ? href : `/${href}`;
 }
