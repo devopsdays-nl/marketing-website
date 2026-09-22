@@ -44,8 +44,9 @@ const ASSETS: Record<string, string> = {
   // visibly empty box. That is artwork, not a script. Nothing is blocked
   // meanwhile: the wordmark is square, so it serves the nav and the favicon.
   //
-  // To restore any other variant, re-extract it from DODA25-logos.zip (the
-  // designer's original archive, gitignored) into src/assets/logo/source/.
+  // The designer's full set (16 SVGs plus PNGs, delivered as DODA25-logos.zip)
+  // is not in this repo. To add another variant, get the archive from the
+  // organisers or the designer and drop the file into src/assets/logo/source/.
 };
 
 mkdirSync(OUT, { recursive: true });
