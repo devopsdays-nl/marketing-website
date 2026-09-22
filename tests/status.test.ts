@@ -7,6 +7,7 @@ import {
   isPublic,
   navItems,
   primaryCta,
+  resolveCtaHref,
 } from '../src/lib/status';
 
 /**
@@ -103,7 +104,7 @@ describe('home page sections per status', () => {
       'where-things-stand',
       'what-to-expect',
       'in-the-meantime',
-      'newsletter',
+      'stay-in-touch',
     ]);
   });
 
@@ -120,7 +121,7 @@ describe('home page sections per status', () => {
       'speakers-teaser',
       'what-to-expect',
       'sponsor-wall',
-      'newsletter',
+      'stay-in-touch',
     ]);
   });
 
@@ -138,10 +139,12 @@ describe('home page sections per status', () => {
 });
 
 describe('the primary call to action', () => {
-  it('asks for a newsletter signup when nothing else is open', () => {
+  it('points at somewhere real when nothing else is open', () => {
     // Sponsorship is the only thing genuinely open this early, so it is the
-    // secondary action; the hero's primary job is capturing interest.
-    expect(primaryCta('announced')).toEqual({ label: 'Get notified', href: '#newsletter' });
+    // secondary action. The primary action has to lead somewhere that works
+    // today: there is no mailing list yet, so it goes to the channels that
+    // already exist rather than to a form with nothing behind it.
+    expect(primaryCta('announced')).toEqual({ label: 'Get notified', href: '#stay-in-touch' });
   });
 
   it('asks for proposals while the CFP is open', () => {
@@ -198,5 +201,31 @@ describe('the status list itself', () => {
         isPublic(status);
       }, status).not.toThrow();
     }
+  });
+});
+
+describe('resolveCtaHref', () => {
+  /**
+   * The "Get notified" action points at #stay-in-touch, which only exists on the
+   * home page. Left as a bare fragment it does nothing at all in the nav of
+   * every other page, which is exactly the dead end the status machine exists
+   * to prevent.
+   */
+  it('leaves a fragment alone on the page that actually has the anchor', () => {
+    expect(resolveCtaHref('#stay-in-touch', '/')).toBe('#stay-in-touch');
+  });
+
+  it('sends a fragment back to the home page from anywhere else', () => {
+    expect(resolveCtaHref('#stay-in-touch', '/sponsor')).toBe('/#stay-in-touch');
+    expect(resolveCtaHref('#stay-in-touch', '/archive/2025')).toBe('/#stay-in-touch');
+  });
+
+  it('never rewrites a real path', () => {
+    expect(resolveCtaHref('/tickets', '/sponsor')).toBe('/tickets');
+    expect(resolveCtaHref('/propose', '/')).toBe('/propose');
+  });
+
+  it('treats the home page with or without a trailing slash the same', () => {
+    expect(resolveCtaHref('#stay-in-touch', '')).toBe('#stay-in-touch');
   });
 });

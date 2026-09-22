@@ -86,9 +86,10 @@ describe('accessibility floor', () => {
     }
   });
 
-  it('labels the email input rather than relying on a placeholder', () => {
-    expect(html).toMatch(/<label[^>]*for="email"/);
-    expect(html).toMatch(/<input[^>]*id="email"/);
+  it('gives every link an accessible name', () => {
+    for (const tag of html.match(/<a[^>]*>\s*<\/a>/g) ?? []) {
+      expect(tag, `empty link: ${tag}`).toMatch(/aria-label=/);
+    }
   });
 });
 
@@ -137,6 +138,28 @@ describe('the nav is driven by edition status', () => {
     for (const dead of ['/propose', '/tickets', '/programme', '/speakers']) {
       expect(nav, `${dead} appears before it leads anywhere`).not.toContain(`href="${dead}"`);
     }
+  });
+});
+
+describe('the primary call to action actually goes somewhere', () => {
+  it('collects no email address, because there is no list behind it yet', () => {
+    // A form posting to a route that does not exist on a static site would take
+    // an address and silently lose it.
+    expect(html).not.toMatch(/<form[\s>]/);
+    expect(html).not.toMatch(/<input[^>]*type="email"/);
+  });
+
+  it('sends "Get notified" to a section that exists on this page', () => {
+    const cta = /<a[^>]*class="btn btn--primary[^"]*"[^>]*>/.exec(html)?.[0] ?? '';
+    const href = /href="([^"]*)"/.exec(cta)?.[1] ?? '';
+    expect(href).toBe('#stay-in-touch');
+    expect(html).toContain('id="stay-in-touch"');
+  });
+
+  it('offers channels that work today', () => {
+    const section = /<section[^>]*id="stay-in-touch"[\s\S]*?<\/section>/.exec(html)?.[0] ?? '';
+    expect(section).toContain('meetup.com');
+    expect(section).toContain('mailto:amsterdam@devopsdays.org');
   });
 });
 

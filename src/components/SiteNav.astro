@@ -1,7 +1,7 @@
 ---
 import Button from './Button.astro';
 import Logo from './Logo.astro';
-import { navItems, primaryCta, type EditionStatus } from '../lib/status';
+import { navItems, primaryCta, resolveCtaHref, type EditionStatus } from '../lib/status';
 
 /**
  * The nav is generated from the edition status, never hand-written. A menu item
@@ -43,7 +43,13 @@ const path = Astro.url.pathname;
       )
     }
 
-    {cta && <Button href={cta.href} variant="primary" class="nav__cta">{cta.label}</Button>}
+    {
+      cta && (
+        <Button href={resolveCtaHref(cta.href, path)} variant="primary" class="nav__cta">
+          {cta.label}
+        </Button>
+      )
+    }
   </div>
 </header>
 

@@ -38,7 +38,7 @@ export type HomeSection =
   | 'where-things-stand'
   | 'what-to-expect'
   | 'in-the-meantime'
-  | 'newsletter'
+  | 'stay-in-touch'
   | 'programme-teaser'
   | 'speakers-teaser'
   | 'sponsor-wall';
@@ -110,7 +110,7 @@ export function homeSections(status: EditionStatus): HomeSection[] {
     case 'announced':
     case 'cfp-open':
     case 'tickets-open':
-      return ['hero', 'where-things-stand', 'what-to-expect', 'in-the-meantime', 'newsletter'];
+      return ['hero', 'where-things-stand', 'what-to-expect', 'in-the-meantime', 'stay-in-touch'];
 
     case 'live':
       return [
@@ -119,7 +119,7 @@ export function homeSections(status: EditionStatus): HomeSection[] {
         'speakers-teaser',
         'what-to-expect',
         'sponsor-wall',
-        'newsletter',
+        'stay-in-touch',
       ];
   }
 }
@@ -135,7 +135,9 @@ export function primaryCta(status: EditionStatus): CallToAction | null {
       return null;
 
     case 'announced':
-      return { label: 'Get notified', href: '#newsletter' };
+      // There is no mailing list yet, so this points at the channels that
+      // already exist rather than at a sign-up form with nothing behind it.
+      return { label: 'Get notified', href: '#stay-in-touch' };
 
     case 'cfp-open':
       return { label: 'Propose a talk', href: '/propose' };
@@ -144,4 +146,19 @@ export function primaryCta(status: EditionStatus): CallToAction | null {
     case 'live':
       return { label: 'Get tickets', href: '/tickets' };
   }
+}
+
+/**
+ * Resolves a call-to-action href against the page it is rendered on.
+ *
+ * The "Get notified" action is a fragment, and the newsletter section only
+ * exists on the home page. In the nav of any other page a bare `#newsletter`
+ * silently does nothing — the same dead end this module exists to prevent, so it
+ * is fixed here rather than in the template.
+ */
+export function resolveCtaHref(href: string, pathname: string): string {
+  if (!href.startsWith('#')) return href;
+
+  const onHome = pathname === '/' || pathname === '';
+  return onHome ? href : `/${href}`;
 }
