@@ -52,7 +52,19 @@ jobs:
       - name: Link check
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --no-progress --verbose dist
+          # --root-dir is what lets lychee resolve root-relative hrefs like
+          # "/sponsor" against the built site rather than the filesystem root.
+          #
+          # The accepted statuses are sites that answer bots with a refusal
+          # rather than a 404: LinkedIn returns 999, several return 403 or 429.
+          # A dead link still fails; an unfriendly one does not.
+          args: >-
+            --no-progress
+            --root-dir ${{ github.workspace }}/dist
+            --accept 200,206,403,429,999
+            --max-retries 2
+            --timeout 20
+            dist
           fail: true
 
       - name: Lighthouse
