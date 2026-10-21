@@ -8,6 +8,15 @@ updates:
     schedule:
       interval: monthly
     open-pull-requests-limit: 5
+
+    ignore:
+      # astro check refuses to run under TypeScript 7 ("does not currently
+      # support TypeScript 7.0") and exits non-zero, which breaks the typecheck
+      # step. Astro's replacement for it, @astrojs/ts-content-mapper, is still
+      # experimental. Revisit when that is stable, then drop this.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+
     groups:
       astro:
         patterns:
