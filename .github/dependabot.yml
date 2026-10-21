@@ -1,0 +1,30 @@
+version: 2
+
+updates:
+  # The site's own dependencies. Grouped so this produces one pull request a
+  # month rather than a steady trickle nobody reviews.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    groups:
+      astro:
+        patterns:
+          - astro
+          - '@astrojs/*'
+      dev-tooling:
+        patterns:
+          - vitest
+          - '@vitest/*'
+          - playwright
+          - '@axe-core/*'
+          - typescript
+          - tsx
+
+  # Workflow actions. These run with repository permissions, so a known-bad
+  # version matters more here than in the site's own dependencies.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
