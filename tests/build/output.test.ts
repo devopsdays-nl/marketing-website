@@ -238,6 +238,64 @@ describe('every internal link respects the base path', () => {
   );
 });
 
+describe('link previews are not broken', () => {
+  // Slack and LinkedIn showed a broken-image placeholder: the page declared
+  // twitter:card=summary_large_image, which promises an image, with no
+  // og:image to satisfy it.
+  const meta = (key: string) =>
+    new RegExp(`<meta (?:property|name)="${key}" content="([^"]*)"`).exec(html)?.[1];
+
+  it('declares an og:image', () => {
+    expect(meta('og:image')).toBeTruthy();
+  });
+
+  it('uses an absolute URL, since a relative one renders as a broken image', () => {
+    expect(meta('og:image')).toMatch(/^https:\/\//);
+  });
+
+  it('ships the image it points at', () => {
+    const url = meta('og:image') ?? '';
+    const path = new URL(url).pathname.replace(import.meta.env.BASE_URL ?? '/', '');
+    expect(existsSync(join(DIST, path)), `${path} is missing from dist/`).toBe(true);
+  });
+
+  it('declares the dimensions, so the card does not reflow while loading', () => {
+    expect(meta('og:image:width')).toBe('1200');
+    expect(meta('og:image:height')).toBe('630');
+  });
+
+  it('gives the image alt text', () => {
+    expect(meta('og:image:alt')).toBeTruthy();
+  });
+
+  it('never promises a large card without an image', () => {
+    if (meta('twitter:card') === 'summary_large_image') {
+      expect(meta('twitter:image'), 'summary_large_image with no image').toBeTruthy();
+    }
+  });
+});
+
+describe('favicons', () => {
+  const base = import.meta.env.BASE_URL ?? '/';
+
+  it.each(['favicon.svg', 'favicon-32.png', 'apple-touch-icon.png'])(
+    'ships %s',
+    (file) => {
+      expect(existsSync(join(DIST, file)), `${file} missing from dist/`).toBe(true);
+    },
+  );
+
+  it('links all three from the page, with the base path applied', () => {
+    for (const file of ['favicon.svg', 'favicon-32.png', 'apple-touch-icon.png']) {
+      expect(html, `${file} is not linked`).toContain(`href="${base}${file}"`);
+    }
+  });
+
+  it('no longer ships the Astro starter icon', () => {
+    expect(existsSync(join(DIST, 'favicon.ico'))).toBe(false);
+  });
+});
+
 describe('markup stays lean', () => {
   it('no element carries duplicated Astro scope classes', () => {
     // Spreading a props object onto an element makes Astro append its scoped

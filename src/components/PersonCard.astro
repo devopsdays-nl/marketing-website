@@ -20,8 +20,15 @@ interface Props {
   secondary?: string;
   links?: { label: string; url: string }[];
   href?: string;
+  /**
+   * Heading level for the name. Cards sit directly under the page h1 on the
+   * organisers page and under an h2 in the styleguide, and skipping a level is
+   * a real problem for anyone navigating by headings.
+   */
+  headingLevel?: 2 | 3 | 4;
 }
-const { name, photo, secondary, links = [], href } = Astro.props;
+const { name, photo, secondary, links = [], href, headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}` as const;
 
 const initials = name
   .split(/\s+/)
@@ -42,9 +49,9 @@ const initials = name
     }
   </div>
 
-  <h3 class="person__name">
+  <Heading class="person__name">
     {href ? <a href={href}>{name}</a> : name}
-  </h3>
+  </Heading>
 
   {secondary && <p class="person__secondary">{secondary}</p>}
 

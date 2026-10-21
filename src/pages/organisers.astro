@@ -30,15 +30,9 @@ const organisers = (await getCollection('organisers')).sort((a, b) =>
       <SectionEyebrow>Organisers</SectionEyebrow>
       <h1>Run by volunteers</h1>
       <p class="lede">
-        Nobody is paid to do this. DevOpsDays Amsterdam is put together by people who do it around
-        their jobs, and has been since 2013.
+        DevOpsDays Amsterdam is put together by people who do it around their jobs, and has been
+        since 2013.
       </p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2>The team</h2>
       <p class="muted">
         The team for {edition.year} is still forming. This page is updated once it is settled.
       </p>
@@ -52,6 +46,7 @@ const organisers = (await getCollection('organisers')).sort((a, b) =>
                 photo={person.data.photo}
                 secondary={person.data.pronouns}
                 links={person.data.links}
+                headingLevel={2}
               />
             </li>
           ))
@@ -117,7 +112,7 @@ const organisers = (await getCollection('organisers')).sort((a, b) =>
   .people {
     list-style: none;
     padding: 0;
-    margin: 2.5rem 0 0;
+    margin: 2rem 0 0;
     display: grid;
     gap: 2.5rem 1.5rem;
     grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
