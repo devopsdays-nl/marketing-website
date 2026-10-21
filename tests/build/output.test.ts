@@ -215,6 +215,29 @@ describe('copy reads correctly', () => {
   });
 });
 
+describe('every internal link respects the base path', () => {
+  // The site deploys to a GitHub project page under /marketing-website/, so a
+  // link written as "/sponsor" 404s unless it is prefixed. Links in .astro go
+  // through joinBase(); links in Markdown go through the rehypeBasePath plugin.
+  // This checks the built output either way, and is meaningful at both roots.
+  const base = import.meta.env.BASE_URL ?? '/';
+
+  it.each(['index', 'sponsor', 'organisers', 'contact', 'archive', 'conference-buddy', 'code-of-conduct'])(
+    '%s',
+    (page) => {
+      const file = page === 'index' ? 'index.html' : `${page}/index.html`;
+      const body = readFileSync(join(DIST, file), 'utf8');
+
+      const internal = (body.match(/(?:href|src)="(\/[a-z_][^"]*)"/g) ?? []).map(
+        (m) => /"([^"]*)"/.exec(m)?.[1] ?? '',
+      );
+      for (const link of internal) {
+        expect(link.startsWith(base), `"${link}" is missing the base "${base}"`).toBe(true);
+      }
+    },
+  );
+});
+
 describe('markup stays lean', () => {
   it('no element carries duplicated Astro scope classes', () => {
     // Spreading a props object onto an element makes Astro append its scoped

@@ -157,32 +157,26 @@ guards and confirming the suite fails.
 
 ## Deployment
 
-Hosted on **Cloudflare Pages**, which deploys straight from this private repo, so
-the code stays closed while the site is publicly shareable.
+Live at **https://devopsdays-nl.github.io/marketing-website/**
 
-Every push to `main` publishes; every pull request gets its own preview URL.
+Pushing to `main` builds and publishes via `.github/workflows/deploy.yml`. Pull
+requests run the full check suite in `.github/workflows/ci.yml`: unit tests,
+typecheck, build, build-output tests, axe, link check and Lighthouse.
 
-**Build settings** (set once in the Cloudflare dashboard, under
-Workers & Pages → the project → Settings → Build):
+A GitHub project page is served from `/marketing-website/`, not the domain root.
+Two things handle that, and neither needs thinking about day to day:
 
-| Setting | Value |
-| --- | --- |
-| Framework preset | Astro |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
-| Node version | read from `.nvmrc` (22.12.0) |
+- links in `.astro` files go through `joinBase()` in `src/lib/url.ts`
+- links written in Markdown are prefixed by the `rehypeBasePath` plugin in
+  `astro.config.mjs`
 
-**Environment variable.** Set `SITE_URL` to the site's real origin, with no
-trailing slash — e.g. `https://devopsdays-amsterdam.pages.dev`, or the custom
-domain once there is one. Everything derived from it (canonical URLs, Open Graph
-tags, the sitemap) follows automatically. Left unset, the build falls back to a
-placeholder that is deliberately not a real domain.
+The base comes from `BASE_PATH`, which the deploy workflow reads from
+`actions/configure-pages`. Locally it is `/`, so both become no-ops.
 
-Pull requests also run the full check suite in `.github/workflows/ci.yml`: unit
-tests, typecheck, build, build-output tests, axe, link check and Lighthouse.
-
-Moving to a custom domain later is a DNS record plus updating `SITE_URL` — no code
-change.
+Moving to a custom domain later: add the domain in the repo's Pages settings and
+point DNS at it. `BASE_PATH` becomes `/` automatically, and `SITE_URL` follows
+from the same action — no code change. Every canonical, Open Graph tag and
+sitemap entry derives from `SITE.url`.
 
 ## Open decisions
 

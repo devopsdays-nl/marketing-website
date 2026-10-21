@@ -5,6 +5,7 @@ import PlaceholderChip from '../components/PlaceholderChip.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import { SITE } from '../config/site';
 import { getCurrentEdition } from '../lib/current-edition';
+import { joinBase } from '../lib/url';
 
 const edition = await getCurrentEdition();
 
@@ -110,7 +111,7 @@ const TIERS = [
         it exists.
       </p>
       <p>
-        You can also look at <a href="/archive">past editions</a> to see who has sponsored before.
+        You can also look at <a href={joinBase('/archive')}>past editions</a> to see who has sponsored before.
       </p>
     </div>
   </section>

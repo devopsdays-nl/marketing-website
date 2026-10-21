@@ -63,5 +63,5 @@ jobs:
         # Budgets are enforced once a host is chosen and previews exist; see
         # lighthouserc.json.
 
-  # Deploys are handled by Cloudflare Pages, which builds from the repo directly
-  # and gives every pull request its own preview URL. Nothing to do here.
+  # Deploy previews are stubbed until a host is chosen (see docs/decisions.md).
+  # Cloudflare Pages / Netlify both wire in here as an extra job.

@@ -12,6 +12,7 @@ import { SOCIALS } from '../config/site';
 import { homeSections, primaryCta } from '../lib/status';
 import { whereThingsStand } from '../lib/status-rows';
 import type { Edition } from '../lib/edition';
+import { joinBase } from '../lib/url';
 
 /**
  * The home page composition comes from the edition status. Changing `status` in
@@ -86,7 +87,7 @@ const FORMAT = [
 
             <p class="hero__actions">
               {cta && <Button href={cta.href} variant="primary">{cta.label}</Button>}
-              <Button href="/sponsor" variant="outline">Sponsor the conference</Button>
+              <Button href={joinBase('/sponsor')} variant="outline">Sponsor the conference</Button>
             </p>
           </div>
         </div>
@@ -113,7 +114,7 @@ const FORMAT = [
                   {row.state === 'tbc' ? (
                     <PlaceholderChip>{row.value}</PlaceholderChip>
                   ) : row.href ? (
-                    <a href={row.href}>
+                    <a href={joinBase(row.href)}>
                       <StatusPill state={row.state}>{row.value}</StatusPill>
                     </a>
                   ) : (
@@ -172,7 +173,7 @@ const FORMAT = [
             <article class="card card--dark">
               <h3>Browse the archive</h3>
               <p>Programmes, speakers and slides from every past edition.</p>
-              <p><a href="/archive">Past editions</a></p>
+              <p><a href={joinBase('/archive')}>Past editions</a></p>
             </article>
             <article class="card card--dark">
               <h3>Come to a meetup</h3>

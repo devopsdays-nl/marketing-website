@@ -6,6 +6,36 @@ import rehypeExternalLinks from 'rehype-external-links';
 import { SITE } from './src/config/site.ts';
 
 /**
+ * Prefixes root-relative links in Markdown with the configured base path.
+ *
+ * Links written in .astro files go through joinBase(), but a link an organiser
+ * writes in Markdown does not — and on a project page served from
+ * /marketing-website/ a bare "/code-of-conduct" 404s. Doing it here means
+ * content authors never have to think about it.
+ */
+function rehypeBasePath() {
+  const raw = process.env.BASE_PATH || '/';
+  const prefix = raw.endsWith('/') ? raw : `${raw}/`;
+
+  return (tree) => {
+    if (prefix === '/') return;
+
+    const walk = (node) => {
+      const attr = node.tagName === 'a' ? 'href' : node.tagName === 'img' ? 'src' : null;
+      const value = attr ? node.properties?.[attr] : undefined;
+
+      if (typeof value === 'string' && value.startsWith('/') && !value.startsWith('//')) {
+        if (!value.startsWith(prefix)) {
+          node.properties[attr] = `${prefix}${value.replace(/^\//, '')}`;
+        }
+      }
+      for (const child of node.children ?? []) walk(child);
+    };
+    walk(tree);
+  };
+}
+
+/**
  * Fonts are declared here rather than linked from the Google CDN. Astro downloads
  * and self-serves them, which is both faster and what keeps the site free of a
  * third-party request that would otherwise need a cookie/consent story.
@@ -23,6 +53,13 @@ import { SITE } from './src/config/site.ts';
 export default defineConfig({
   site: SITE.url,
 
+  /**
+   * A GitHub project page is served from /<repo>/, not the domain root. Set
+   * BASE_PATH in CI for that; it stays "/" locally and on a custom domain, where
+   * joinBase() then becomes a no-op.
+   */
+  base: process.env.BASE_PATH || '/',
+
   output: 'static',
 
   markdown: {
@@ -37,6 +74,7 @@ export default defineConfig({
     processor: unified({
       rehypePlugins: [
         [rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] }],
+        rehypeBasePath,
       ],
     }),
   },
