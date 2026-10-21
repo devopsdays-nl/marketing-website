@@ -1,0 +1,20 @@
+# Code owners for DevOpsDays Amsterdam.
+#
+# Everyone listed here can approve a pull request. Listing several people is
+# deliberate: GitHub does not let you approve your own pull request, so a single
+# owner would mean nobody could ever merge anything.
+#
+# These are the people who currently have admin on the repository. Add or remove
+# names as the organising team changes — a name here only counts if that person
+# has write access.
+
+# Everything, unless overridden below.
+*                   @EtiNoked @issyl0 @josvanschouten @npalm
+
+# Anything that decides what gets built, published, or run in CI. Called out
+# separately because this is the part a drive-by pull request could abuse on a
+# public repository: a workflow change runs with repository permissions.
+/.github/           @EtiNoked @issyl0 @josvanschouten @npalm
+/astro.config.mjs   @EtiNoked @issyl0 @josvanschouten @npalm
+/package.json       @EtiNoked @issyl0 @josvanschouten @npalm
+/package-lock.json  @EtiNoked @issyl0 @josvanschouten @npalm
