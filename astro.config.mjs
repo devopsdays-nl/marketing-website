@@ -17,18 +17,24 @@ function rehypeBasePath() {
   const raw = process.env.BASE_PATH || '/';
   const prefix = raw.endsWith('/') ? raw : `${raw}/`;
 
+  /** @param {any} tree */
   return (tree) => {
     if (prefix === '/') return;
 
+    /** @param {any} node */
     const walk = (node) => {
-      const attr = node.tagName === 'a' ? 'href' : node.tagName === 'img' ? 'src' : null;
-      const value = attr ? node.properties?.[attr] : undefined;
+      const attr = node.tagName === 'a' ? 'href' : node.tagName === 'img' ? 'src' : undefined;
 
-      if (typeof value === 'string' && value.startsWith('/') && !value.startsWith('//')) {
-        if (!value.startsWith(prefix)) {
+      if (attr) {
+        const value = node.properties?.[attr];
+        const isSiteRelative =
+          typeof value === 'string' && value.startsWith('/') && !value.startsWith('//');
+
+        if (isSiteRelative && !value.startsWith(prefix)) {
           node.properties[attr] = `${prefix}${value.replace(/^\//, '')}`;
         }
       }
+
       for (const child of node.children ?? []) walk(child);
     };
     walk(tree);
