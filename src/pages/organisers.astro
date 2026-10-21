@@ -29,10 +29,6 @@ const organisers = (await getCollection('organisers')).sort((a, b) =>
     <div class="wrap">
       <SectionEyebrow>Organisers</SectionEyebrow>
       <h1>Run by volunteers</h1>
-      <p class="lede">
-        DevOpsDays Amsterdam is put together by people who do it around their jobs, and has been
-        since 2013.
-      </p>
       <p class="muted">
         The team for {edition.year} is still forming. This page is updated once it is settled.
       </p>
@@ -89,12 +85,6 @@ const organisers = (await getCollection('organisers')).sort((a, b) =>
 </BaseLayout>
 
 <style>
-  .lede {
-    font-size: 1.15rem;
-    color: var(--text-muted);
-    max-width: 46ch;
-  }
-
   .muted {
     color: var(--text-muted);
     max-width: 52ch;

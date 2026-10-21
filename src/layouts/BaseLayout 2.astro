@@ -1,0 +1,51 @@
+---
+import { Font } from 'astro:assets';
+
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteNav from '../components/SiteNav.astro';
+import { SITE, absoluteUrl } from '../config/site';
+import type { EditionStatus } from '../lib/status';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  status: EditionStatus;
+  noindex?: boolean;
+}
+const { title, description, status, noindex = false } = Astro.props;
+
+const fullTitle = title === SITE.name ? title : `${title} — ${SITE.name}`;
+const canonical = absoluteUrl(Astro.url.pathname);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <Font cssVariable="--font-heading-family" preload />
+    <Font cssVariable="--font-body-family" preload />
+    <Font cssVariable="--font-label-family" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteNav status={status} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>
