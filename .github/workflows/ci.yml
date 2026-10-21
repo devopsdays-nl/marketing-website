@@ -37,16 +37,17 @@ jobs:
       - name: Build-output tests
         run: npm run test:build
 
+      # Playwright ships a browser matched to itself. @axe-core/cli bundles its
+      # own ChromeDriver, which drifts out of step with the runner's Chrome and
+      # fails with a version mismatch.
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
       - name: Accessibility scan
         run: |
           npx --yes serve dist --listen 4321 &
           npx --yes wait-on http://localhost:4321 --timeout 60000
-          npx --yes @axe-core/cli http://localhost:4321 \
-            http://localhost:4321/sponsor \
-            http://localhost:4321/organisers \
-            http://localhost:4321/contact \
-            http://localhost:4321/code-of-conduct \
-            --exit
+          npm run test:a11y -- http://localhost:4321
 
       - name: Link check
         uses: lycheeverse/lychee-action@v2

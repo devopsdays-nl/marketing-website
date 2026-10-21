@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:build": "vitest run --config vitest.build.config.ts"
+    "test:build": "vitest run --config vitest.build.config.ts",
+    "test:a11y": "node scripts/a11y.mjs"
   },
   "dependencies": {
     "astro": "^7.3.3"
@@ -24,8 +25,10 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.3.1",
+    "@axe-core/playwright": "^4.14.0",
     "@types/node": "^26.6.2",
     "@vitest/coverage-v8": "^5.0.1",
+    "playwright": "^1.64.1",
     "rehype-external-links": "^3.0.0",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
