@@ -53,6 +53,7 @@ const NAV = {
   tickets: { label: 'Tickets', href: '/tickets' },
   sponsor: { label: 'Sponsor', href: '/sponsor' },
   archive: { label: 'Past editions', href: '/archive' },
+  organisers: { label: 'Organisers', href: '/organisers' },
   contact: { label: 'Contact', href: '/contact' },
 } as const satisfies Record<string, NavItem>;
 
@@ -69,13 +70,13 @@ export function navItems(status: EditionStatus): NavItem[] {
       return [];
 
     case 'announced':
-      return [NAV.sponsor, NAV.archive, NAV.contact];
+      return [NAV.sponsor, NAV.archive, NAV.organisers, NAV.contact];
 
     case 'cfp-open':
-      return [NAV.propose, NAV.sponsor, NAV.archive, NAV.contact];
+      return [NAV.propose, NAV.sponsor, NAV.archive, NAV.organisers, NAV.contact];
 
     case 'tickets-open':
-      return [NAV.propose, NAV.tickets, NAV.sponsor, NAV.archive, NAV.contact];
+      return [NAV.propose, NAV.tickets, NAV.sponsor, NAV.archive, NAV.organisers, NAV.contact];
 
     case 'live':
       return [
@@ -84,6 +85,7 @@ export function navItems(status: EditionStatus): NavItem[] {
         NAV.location,
         NAV.tickets,
         NAV.sponsor,
+        NAV.organisers,
         NAV.contact,
       ];
   }

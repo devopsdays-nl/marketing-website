@@ -27,11 +27,17 @@ describe('nav contents per status', () => {
   });
 
   it('shows only what leads somewhere once announced', () => {
-    expect(labelsAt('announced')).toEqual(['Sponsor', 'Past editions', 'Contact']);
+    expect(labelsAt('announced')).toEqual(['Sponsor', 'Past editions', 'Organisers', 'Contact']);
   });
 
   it('adds Propose when the CFP opens', () => {
-    expect(labelsAt('cfp-open')).toEqual(['Propose', 'Sponsor', 'Past editions', 'Contact']);
+    expect(labelsAt('cfp-open')).toEqual([
+      'Propose',
+      'Sponsor',
+      'Past editions',
+      'Organisers',
+      'Contact',
+    ]);
   });
 
   it('adds Tickets when they go on sale', () => {
@@ -40,6 +46,7 @@ describe('nav contents per status', () => {
       'Tickets',
       'Sponsor',
       'Past editions',
+      'Organisers',
       'Contact',
     ]);
   });
@@ -51,6 +58,7 @@ describe('nav contents per status', () => {
       'Location',
       'Tickets',
       'Sponsor',
+      'Organisers',
       'Contact',
     ]);
   });
@@ -77,6 +85,14 @@ describe('links never appear before they lead somewhere', () => {
     for (const status of ['planning', 'announced', 'cfp-open', 'tickets-open'] as const) {
       expect(labelsAt(status)).not.toContain('Programme');
       expect(labelsAt(status)).not.toContain('Speakers');
+    }
+  });
+
+  it('always puts Organisers immediately before Contact', () => {
+    for (const status of EDITION_STATUSES) {
+      const labels = labelsAt(status);
+      if (!labels.includes('Contact')) continue;
+      expect(labels[labels.indexOf('Contact') - 1], `in "${status}"`).toBe('Organisers');
     }
   });
 
