@@ -3,7 +3,9 @@ title: Conference Buddy
 description: A programme that helps first-time attendees and seasoned conference-goers find each other.
 # Body is reproduced from devopsdays-web,
 # content/events/2025-amsterdam/conference-buddy.md. The only changes are the
-# removal of a duplicated H1 and two stale 2025 references. Do not reword it.
+# removal of a duplicated H1, two stale 2025 references, and a trailing link to
+# conferencebuddy.io — that domain no longer resolves (no DNS record at all),
+# and the CI link check flagged it. Do not reword the rest.
 ---
 
 Are you a seasoned conference-goer eager to share your expertise and expand your network? Or perhaps you're a first-time attendee feeling a bit overwhelmed by the bustling atmosphere? No matter where you fall on the spectrum, Conference Buddy is here to enhance your DevOpsDays experience.
@@ -31,5 +33,3 @@ We are here to support you!
 * Post on social media. Let others know that you are looking for a `#ConfBuddy`. Use the hashtag of the conference (`#devopsdays`) or tag it, too.
 * Follow the Pacman rule. When standing as a group of people, always leave room for others to join your group. This sends a visual signal of: “Hey, you are welcome here!”. 
 * Come to the Conference Buddy booth and hang out with us!
-
-Website: https://conferencebuddy.io
